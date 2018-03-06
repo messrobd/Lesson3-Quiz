@@ -18,8 +18,7 @@ def composeQuestionString(question):
     return blanked_q_string
 
 def play(question):
-    blanked_q_string = composeQuestionString(question)
-    print blanked_q_string
+    print question[0]
 
     n = 1
     for q in question[1]:
@@ -32,9 +31,9 @@ def play(question):
 
     return
 
-question = ["this is a test question",["test"]]
+question = ["this is a _____ question. luckily, it's just a _____",["stupid","test"]]
 
-#play(question)
+play(question)
 
 def tests():
     #findQuestionWords
@@ -63,4 +62,4 @@ def tests():
     #ran all tests
     print "ran all tests"
 
-tests()
+#tests()
