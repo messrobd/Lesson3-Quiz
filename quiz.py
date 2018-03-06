@@ -17,7 +17,24 @@ def composeQuestionString(question):
     blanked_q_string = " ".join(blanked_q)
     return blanked_q_string
 
+def play(question):
+    blanked_q_string = composeQuestionString(question)
+    print blanked_q_string
 
+    n = 1
+    for q in question[1]:
+        answer = raw_input("Fill in blank {0}: ".format(n))
+        if answer.lower() == q.lower():
+            print "Correct!"
+        else:
+            print "Sorry, the correct answer is {0}".format(q.upper())
+        n += 1
+
+    return
+
+question = ["this is a test question",["test"]]
+
+play(question)
 
 def tests():
     #findQuestionWords
