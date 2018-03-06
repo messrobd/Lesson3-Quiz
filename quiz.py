@@ -6,22 +6,29 @@ def findQuestionWords(word, question_words):
     return
 
 def findAllQuestionWords(question):
-    q_word_list = question[0].split()
+    q_list = question[0].split()
     w_number = 0
     q_words = question[1]
     q_number = 0
     q_words_located = []
     for q in q_words:
-        for w in q_word_list:
+        for w in q_list:
             if q in w:
                 q_words_located.append(q_number)
-                q_word_list = q_word_list[w_number+1:]
+                q_list = q_list[w_number+1:]
                 q_number += 1
                 break
             else:
-                q_words_located.append(False)
+                q_words_located.append("")
             w_number += 1
     return q_words_located
+
+def getAnsweredQuestionString(question,q_number):
+    q_list = question[0].split()
+    q_words_located = findAllQuestionWords(question)
+    q_index = q_words_located.index(q_number)
+    a_list = " ".join(q_list[:q_index])
+    return q_index, a_list
 
 def composeQuestionString(question,q_number):
     """inputs:
