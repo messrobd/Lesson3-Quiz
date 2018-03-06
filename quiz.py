@@ -30,21 +30,24 @@ def answerQuestion(question):
     """loops over the question words in the question"""
     q_number = 0
     for q in question[1]:
+        answered = False
         blanked_q_string = composeQuestionString(question,q_number)
-        print "Question {0}".format(q_number+1)
+        print "Question {0}:".format(q_number+1)
         print blanked_q_string
-        answer = raw_input("Answer: ")
-        if answer.lower() == q.lower():
-            print "Correct!"
-        else:
-            print "Sorry, the correct answer is {0}".format(q.upper())
+        while answered == False:
+            answer = raw_input("Answer: ")
+            if answer.lower() == q.lower():
+                print "Correct!"
+                answered = True
+            else:
+                print "Sorry, that's not correct. Try again: "
         q_number += 1
 
     return
 
 question = ["this is a stupid question, luckily it's only a test",["stupid", "test"]]
 
-answerQuestion(question)
+#answerQuestion(question)
 
 def tests():
     #findQuestionWords
