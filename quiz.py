@@ -34,7 +34,7 @@ def play(question):
 
 question = ["this is a test question",["test"]]
 
-play(question)
+#play(question)
 
 def tests():
     #findQuestionWords
@@ -49,14 +49,16 @@ def tests():
     questions = [
     ["this is a test", ["test"]],
     ["this is a test1, and test2", ["test1", "test2"]],
+    ["a test, another test", ["test", "test"]],
     ["this is a neg1", ["test"]],
     ["this is a test", ["neg2"]]
     ]
 
     assert composeQuestionString(questions[0]) == "this is a _____"
     assert composeQuestionString(questions[1]) == "this is a _____, and _____"
-    assert composeQuestionString(questions[2]) == "this is a neg1"
-    assert composeQuestionString(questions[3]) == "this is a test"
+    assert composeQuestionString(questions[2]) == "a _____, another _____"
+    assert composeQuestionString(questions[3]) == "this is a neg1"
+    assert composeQuestionString(questions[4]) == "this is a test"
 
     #ran all tests
     print "ran all tests"
