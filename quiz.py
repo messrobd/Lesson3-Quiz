@@ -42,7 +42,7 @@ def findAllQuestionWords(question):
     blanked_q_string = " ".join(blanked_q)
     return blanked_q_string"""
 
-def composeQuestionString(question,q_number):
+"""def composeQuestionString(question,q_number):
     q_word_list = question[0].split()
     w_number = 0
     q_words = question[1]
@@ -57,8 +57,13 @@ def composeQuestionString(question,q_number):
         composed_q.append(w)
         w_number += 1
     composed_q_string = " ".join(composed_q)
-    return composed_q_string
+    return composed_q_string"""
 
+def composeQuestionString(question, q_number):
+    q_word_list = question[0].split()
+    q_words_located = findAllQuestionWords(question)
+    answered = q_word_list[:q_words_located.index(q_number)]
+    return answered
 
 def answerQuestion(question):
     """loops over the question words in the question"""
@@ -100,15 +105,16 @@ def tests():
     ["this is a neg1", ["test"]],
     ["this is a test", ["neg2"]]
     ]
-
-    assert composeQuestionString(questions[0],0) == "this is a _____"
-    assert composeQuestionString(questions[1],0) == "this is a _____, and _____"
+    """
+    assert composeQuestionString(questions[0],1) == "this is a _____"
+    assert composeQuestionString(questions[1],1) == "this is a _____, and _____"
     assert composeQuestionString(questions[2],1) == "a _____, another _____"
     assert composeQuestionString(questions[3],1) == "this is a neg1"
     assert composeQuestionString(questions[4],1) == "this is a test"
     assert composeQuestionString(questions[1],2) == "this is a test1, and _____"
     assert composeQuestionString(questions[2],2) == "a test, another _____"
-
+    """
+    print composeQuestionString(questions[0],1)
     assert findAllQuestionWords(questions[0]) == [False, False, False, 1]
     assert findAllQuestionWords(questions[1]) == [False, False, False, 1, False, 2]
     assert findAllQuestionWords(questions[2]) == [False, 1, False, 2]
