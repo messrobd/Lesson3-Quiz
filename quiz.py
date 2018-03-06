@@ -98,11 +98,11 @@ def tests():
     assert composeQuestionString(questions[1],1) == "this is a test1, and _____"
     #assert composeQuestionString(questions[2],1) == "a test, another _____"
 
-    assert findAllQuestionWords(questions[0]) == [False, False, False, 0]
-    assert findAllQuestionWords(questions[1]) == [False, False, False, 0, False, 1]
-    assert findAllQuestionWords(questions[2]) == [False, 0, False, 1]
-    assert findAllQuestionWords(questions[3]) == [False, False, False, False]
-    assert findAllQuestionWords(questions[4]) == [False, False, False, False]
+    assert findAllQuestionWords(questions[0]) == ["", "", "", 0]
+    assert findAllQuestionWords(questions[1]) == ["", "", "", 0, "", 1]
+    assert findAllQuestionWords(questions[2]) == ["", 0, "", 1]
+    assert findAllQuestionWords(questions[3]) == ["", "", "", ""]
+    assert findAllQuestionWords(questions[4]) == ["", "", "", ""]
 
     #ran all tests
     print "ran all tests"
