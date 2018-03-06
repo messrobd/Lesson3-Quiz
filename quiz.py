@@ -5,6 +5,24 @@ def findQuestionWords(word, question_words):
             return q
     return
 
+def findAllQuestionWords(question):
+    q_word_list = question[0].split()
+    w_number = 0
+    q_words = question[1]
+    q_number = 0
+    q_words_located = []
+    for q in q_words:
+        for w in q_word_list:
+            if q in w:
+                q_words_located.append(q_number)
+                q_word_list = q_word_list[w_number+1:]
+                q_number += 1
+                break
+            else:
+                q_words_located.append(False)
+            w_number += 1
+    return q_words_located
+
 def composeQuestionString(question,q_number):
     """inputs:
     1. a question of the following form:
@@ -12,8 +30,6 @@ def composeQuestionString(question,q_number):
     2. question number (0-based)
     output is a string with the remaining question words replaced with blanks.
     question words must be unique"""
-
-    #assert len(question[1]) >= q_number+1
 
     question_string = question[0].split()
     question_words = question[1][q_number:]
@@ -58,7 +74,7 @@ def tests():
     assert findQuestionWords(test_words[1],question_words) == "test"
     assert findQuestionWords(test_words[2],question_words) == None
 
-    #composeQuestionString
+    #findAllQuestionWords, composeQuestionString
     questions = [
     ["this is a test", ["test"]],
     ["this is a test1, and test2", ["test1", "test2"]],
@@ -74,7 +90,12 @@ def tests():
     assert composeQuestionString(questions[4],0) == "this is a test"
     assert composeQuestionString(questions[1],1) == "this is a test1, and _____"
     #assert composeQuestionString(questions[2],1) == "a test, another _____"
-    #assert composeQuestionString(questions[0],1) == AssertionError
+
+    assert findAllQuestionWords(questions[0]) == [False, False, False, 0]
+    assert findAllQuestionWords(questions[1]) == [False, False, False, 0, False, 1]
+    assert findAllQuestionWords(questions[2]) == [False, 0, False, 1]
+    assert findAllQuestionWords(questions[3]) == [False, False, False, False]
+    assert findAllQuestionWords(questions[4]) == [False, False, False, False]
 
     #ran all tests
     print "ran all tests"
