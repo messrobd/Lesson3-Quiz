@@ -7,6 +7,12 @@ def define3LevelGame(easy_q, medium_q, hard_q):
 
     return game
 
+def pickLevel(game):
+    print "Pick a level:"
+    for g in game:
+        print "{0} - {1}".format(game.index(g), g[0])
+    return 
+
 def findAllQuestionWords(question):
     q_list = question[0].split()
     w_number = 0
@@ -132,6 +138,8 @@ def tests():
     assert game[0][0] == "Easy"
     assert game[1][0] == "Medium"
     assert game[2][0] == "Hard"
+
+    print pickLevel(game)
 
     #ran all tests
     print "ran all tests"
