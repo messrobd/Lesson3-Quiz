@@ -73,21 +73,25 @@ def composeQuestionString(question,q_number):
 
 
 def answerQuestion(question, q_number):
-    answered = False
     q_string = composeQuestionString(question,q_number)
     q = question[1][q_number]
 
     print "Question {0}:".format(q_number+1)
     print q_string
-    while answered == False:
+    answered = False
+    lives = 5
+    while answered == False and lives >= 1:
         answer = raw_input("Answer: ")
         if answer.lower() == q.lower():
             print "Correct!"
             answered = True
+            return
+        elif lives > 1:
+            lives -= 1
+            print "Sorry, that's not correct. Try again ({0} attempts left): ".format(lives)
         else:
-            print "Sorry, that's not correct. Try again: "
-
-    return
+            print "Unlucky. The answer is {0}".format(q.upper())
+            return
 
 def play(game):
     level = pickLevel(game)
