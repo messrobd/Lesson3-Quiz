@@ -62,14 +62,12 @@ def composeQuestionString(question,q_number):
             if q in w:
                 b = "_" * len(q)
                 w = w.replace(q, b)
-                a_list.append(w)
                 q_list = q_list[q_index+1:]
                 q_words = q_words[q_number+1:]
                 q_number += 1
                 break
-            else:
-                a_list.append(w)
             q_index += 1
+        a_list.append(w)
     q_string = " ".join(a_list)
 
     return q_string
@@ -148,12 +146,11 @@ def tests():
 
     #composeQuestionString
     assert composeQuestionString(questions[0],0) == "this is a ____"
-    #assert composeQuestionString(questions[1],0) == "a ____, this is"
-    print composeQuestionString(questions[1],0)
+    assert composeQuestionString(questions[1],0) == "a ____, this is"
     assert composeQuestionString(questions[2],0) == "this is a _____, and _____"
     assert composeQuestionString(questions[3],0) == "a ____, another ____"
     print composeQuestionString(questions[4],0)
-    print composeQuestionString(questions[5],0)
+    assert composeQuestionString(questions[5],0) == "this is a ____, but this is not a test"
     assert composeQuestionString(questions[2],1) == "this is a test1, and _____"
     assert composeQuestionString(questions[3],1) == "a test, another ____"
     assert composeQuestionString(questions[6],0) == "No matching question words found in question"
