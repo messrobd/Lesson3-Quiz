@@ -66,9 +66,20 @@ def answerQuestion(question, q_number):
 
     return
 
+def play(question):
+    q_words = question[1]
+
+    for q in q_words:
+        q_number = q_words.index(q)
+        answerQuestion(question, q_number)
+
+    return
+
+
 question = ["this is a stupid question, luckily it's only a test",["stupid", "test"]]
 
 #answerQuestion(question, 1)
+play(question)
 
 def tests():
     questions = [
