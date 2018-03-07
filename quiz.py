@@ -42,17 +42,23 @@ def findAllQuestionWords(question):
     return q_words_located
 
 def getAnsweredQuestionPart(question,q_number):
-    q_list = question[0].split()
-    q_words_located = findAllQuestionWords(question)
-    q_index = q_words_located.index(q_number)
-    a_list = q_list[:q_index]
+    try:
+        q_list = question[0].split()
+        q_words_located = findAllQuestionWords(question)
+        q_index = q_words_located.index(q_number)
+        a_list = q_list[:q_index]
+    except:
+        return "No matching question words found in question"
 
     return q_index, a_list
 
 def composeQuestionString(question,q_number):
-    q_index, a_list = getAnsweredQuestionPart(question,q_number)
-    q_list = question[0].split()[q_index:]
-    q_words = question[1][q_number:]
+    try:
+        q_index, a_list = getAnsweredQuestionPart(question,q_number)
+        q_list = question[0].split()[q_index:]
+        q_words = question[1][q_number:]
+    except:
+        return "No matching question words found in question"
 
     for w in q_list:
         for q in q_words:
@@ -129,6 +135,8 @@ def tests():
     assert getAnsweredQuestionPart(questions[0],0) == (3, ["this", "is", "a"])
     assert getAnsweredQuestionPart(questions[1],0) == (3, ["this", "is", "a"])
     assert getAnsweredQuestionPart(questions[2],0) == (1, ["a"])
+    assert getAnsweredQuestionPart(questions[3],0) == "No matching question words found in question"
+    assert getAnsweredQuestionPart(questions[4],0) == "No matching question words found in question"
     assert getAnsweredQuestionPart(questions[1],1) == (5, ["this", "is", "a", "test1,", "and"])
     assert getAnsweredQuestionPart(questions[2],1) == (3, ["a", "test,", "another"])
 
@@ -136,8 +144,8 @@ def tests():
     assert composeQuestionString(questions[0],0) == "this is a ____"
     assert composeQuestionString(questions[1],0) == "this is a _____, and _____"
     assert composeQuestionString(questions[2],0) == "a ____, another ____"
-    #assert composeQuestionString(questions[3],0) == "this is a neg1" unsupported case
-    #assert composeQuestionString(questions[4],0) == "this is a test" unsupported case
+    assert composeQuestionString(questions[3],0) == "No matching question words found in question"
+    assert composeQuestionString(questions[4],0) == "No matching question words found in question"
     assert composeQuestionString(questions[1],1) == "this is a test1, and _____"
     assert composeQuestionString(questions[2],1) == "a test, another ____"
     """
