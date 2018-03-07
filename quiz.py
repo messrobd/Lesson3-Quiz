@@ -70,7 +70,6 @@ question = ["this is a stupid question, luckily it's only a test",["stupid", "te
 #answerQuestion(question)
 
 def tests():
-    #findAllQuestionWords, composeQuestionString
     questions = [
     ["this is a test", ["test"]],
     ["this is a test1, and test2", ["test1", "test2"]],
@@ -78,29 +77,35 @@ def tests():
     ["this is a neg1", ["test"]],
     ["this is a test", ["neg2"]]
     ]
-
-    assert composeQuestionString(questions[0],0) == "this is a ____"
-    assert composeQuestionString(questions[1],0) == "this is a _____, and _____"
-    assert composeQuestionString(questions[2],0) == "a ____, another ____"
-    #assert composeQuestionString(questions[3],0) == "this is a neg1" negative tests fail
-    #assert composeQuestionString(questions[4],0) == "this is a test" negative tests fail
-    assert composeQuestionString(questions[1],1) == "this is a test1, and _____"
-    assert composeQuestionString(questions[2],1) == "a test, another ____"
-    """
-    print composeQuestionString(questions[0],0)
-    print composeQuestionString(questions[1],0)
-    print composeQuestionString(questions[2],0)
-    #print composeQuestionString(questions[3],0) negative tests fail
-    #print composeQuestionString(questions[4],0) negative tests fail
-    print composeQuestionString(questions[1],1)
-    print composeQuestionString(questions[2],1)
-    """
+    #findAllQuestionWords
     assert findAllQuestionWords(questions[0]) == ["", "", "", 0]
     assert findAllQuestionWords(questions[1]) == ["", "", "", 0, "", 1]
     assert findAllQuestionWords(questions[2]) == ["", 0, "", 1]
     assert findAllQuestionWords(questions[3]) == ["", "", "", ""]
     assert findAllQuestionWords(questions[4]) == ["", "", "", ""]
 
+    #getAnsweredQuestionString
+    assert getAnsweredQuestionString(questions[0],0) == (3, ["this", "is", "a"])
+    assert getAnsweredQuestionString(questions[1],0) == (3, ["this", "is", "a"])
+    assert getAnsweredQuestionString(questions[2],0) == (1, ["a"])
+    assert getAnsweredQuestionString(questions[1],1) == (5, ["this", "is", "a", "test1,", "and"])
+    assert getAnsweredQuestionString(questions[2],1) == (3, ["a", "test,", "another"])
+
+    #composeQuestionString
+    assert composeQuestionString(questions[0],0) == "this is a ____"
+    assert composeQuestionString(questions[1],0) == "this is a _____, and _____"
+    assert composeQuestionString(questions[2],0) == "a ____, another ____"
+    #assert composeQuestionString(questions[3],0) == "this is a neg1" unsupported case
+    #assert composeQuestionString(questions[4],0) == "this is a test" unsupported case
+    assert composeQuestionString(questions[1],1) == "this is a test1, and _____"
+    assert composeQuestionString(questions[2],1) == "a test, another ____"
+    """
+    print getAnsweredQuestionString(questions[0],0)
+    print getAnsweredQuestionString(questions[1],0)
+    print getAnsweredQuestionString(questions[2],0)
+    print getAnsweredQuestionString(questions[1],1)
+    print getAnsweredQuestionString(questions[2],1)
+    """
     #ran all tests
     print "ran all tests"
 
