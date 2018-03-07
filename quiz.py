@@ -23,21 +23,18 @@ def pickLevel(game):
 
 def findAllQuestionWords(question):
     q_list = question[0].split()
-    w_number = 0
     q_words = question[1]
     q_number = 0
     q_words_located = []
-
-    for q in q_words:
-        for w in q_list:
+    for w in q_list:
+        e = ""
+        for q in q_words:
             if q in w:
-                q_words_located.append(q_number)
-                q_list = q_list[w_number+1:]
+                e = q_number
+                q_words = q_words[1:]
                 q_number += 1
                 break
-            else:
-                q_words_located.append("")
-            w_number += 1
+        q_words_located.append(e)
 
     return q_words_located
 
@@ -129,12 +126,11 @@ def tests():
     ]
     #findAllQuestionWords
     assert findAllQuestionWords(questions[0]) == ["", "", "", 0]
-    #assert findAllQuestionWords(questions[1]) == ["", 0, "", ""]
-    print findAllQuestionWords(questions[1])
+    assert findAllQuestionWords(questions[1]) == ["", 0, "", ""]
     assert findAllQuestionWords(questions[2]) == ["", "", "", 0, "", 1]
     assert findAllQuestionWords(questions[3]) == ["", 0, "", 1]
     print findAllQuestionWords(questions[4])
-    print findAllQuestionWords(questions[5])
+    assert findAllQuestionWords(questions[5]) == ["", "", "", 0, "", "", "", "", "", ""]
     assert findAllQuestionWords(questions[6]) == ["", "", "", ""]
     assert findAllQuestionWords(questions[7]) == ["", "", "", ""]
 
