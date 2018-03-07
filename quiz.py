@@ -13,8 +13,9 @@ def pickLevel(game):
         print "{0} - {1}".format(game.index(g), g[0])
     valid_pick = False
     while valid_pick == False:
+        pick = raw_input()
         try:
-            pick = game[int(raw_input())]
+            pick = game[int(pick)]
             valid_pick = True
         except:
             print "Please pick a number 0 - {0}".format(len(game)-1)
