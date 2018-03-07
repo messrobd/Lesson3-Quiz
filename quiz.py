@@ -11,7 +11,14 @@ def pickLevel(game):
     print "Pick a level:"
     for g in game:
         print "{0} - {1}".format(game.index(g), g[0])
-    return 
+    valid_pick = False
+    while valid_pick == False:
+        try:
+            pick = game[int(raw_input())]
+            valid_pick = True
+        except:
+            print "Please pick a number 0 - 2"
+    return pick 
 
 def findAllQuestionWords(question):
     q_list = question[0].split()
