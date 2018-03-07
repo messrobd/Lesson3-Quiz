@@ -1,3 +1,12 @@
+def define3LevelGame(easy_q, medium_q, hard_q):
+    easy_level = ["Easy", easy_q]
+    medium_level = ["Medium", medium_q]
+    hard_level = ["Hard", hard_q]
+
+    game = [easy_level, medium_level, hard_level]
+
+    return game
+
 def findAllQuestionWords(question):
     q_list = question[0].split()
     w_number = 0
@@ -79,7 +88,7 @@ def play(question):
 question = ["this is a stupid question, luckily it's only a test",["stupid", "test"]]
 
 #answerQuestion(question, 1)
-play(question)
+# play(question)
 
 def tests():
     questions = [
@@ -118,6 +127,12 @@ def tests():
     print getAnsweredQuestionString(questions[1],1)
     print getAnsweredQuestionString(questions[2],1)
     """
+    game = define3LevelGame(questions[0], questions[1], questions[2])
+
+    assert game[0][0] == "Easy"
+    assert game[1][0] == "Medium"
+    assert game[2][0] == "Hard"
+
     #ran all tests
     print "ran all tests"
 
