@@ -17,7 +17,7 @@ def pickLevel(game):
             pick = game[int(raw_input())]
             valid_pick = True
         except:
-            print "Please pick a number 0 - 2"
+            print "Please pick a number 0 - {0}".format(len(game)-1)
     return pick
 
 def findAllQuestionWords(question):
