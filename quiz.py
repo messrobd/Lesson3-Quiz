@@ -119,50 +119,58 @@ question = ["this is a stupid question, luckily it's only a test",["stupid", "te
 def tests():
     questions = [
     ["this is a test", ["test"]],
+    ["a test, this is", ["test"]],
     ["this is a test1, and test2", ["test1", "test2"]],
     ["a test, another test", ["test", "test"]],
+    ["this is not a test, but this is a test",["test"]],
+    ["this is a test, but this is not a test",["test"]],
     ["this is a neg1", ["test"]],
     ["this is a test", ["neg2"]]
     ]
     #findAllQuestionWords
     assert findAllQuestionWords(questions[0]) == ["", "", "", 0]
-    assert findAllQuestionWords(questions[1]) == ["", "", "", 0, "", 1]
-    assert findAllQuestionWords(questions[2]) == ["", 0, "", 1]
-    assert findAllQuestionWords(questions[3]) == ["", "", "", ""]
-    assert findAllQuestionWords(questions[4]) == ["", "", "", ""]
+    #assert findAllQuestionWords(questions[1]) == ["", 0, "", ""]
+    print findAllQuestionWords(questions[1])
+    assert findAllQuestionWords(questions[2]) == ["", "", "", 0, "", 1]
+    assert findAllQuestionWords(questions[3]) == ["", 0, "", 1]
+    print findAllQuestionWords(questions[4])
+    print findAllQuestionWords(questions[5])
+    assert findAllQuestionWords(questions[6]) == ["", "", "", ""]
+    assert findAllQuestionWords(questions[7]) == ["", "", "", ""]
 
     #getAnsweredQuestionString
     assert getAnsweredQuestionPart(questions[0],0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(questions[1],0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(questions[2],0) == (1, ["a"])
-    assert getAnsweredQuestionPart(questions[3],0) == "No matching question words found in question"
-    assert getAnsweredQuestionPart(questions[4],0) == "No matching question words found in question"
-    assert getAnsweredQuestionPart(questions[1],1) == (5, ["this", "is", "a", "test1,", "and"])
-    assert getAnsweredQuestionPart(questions[2],1) == (3, ["a", "test,", "another"])
+    assert getAnsweredQuestionPart(questions[1],0) == (1, ["a"])
+    assert getAnsweredQuestionPart(questions[2],0) == (3, ["this", "is", "a"])
+    assert getAnsweredQuestionPart(questions[3],0) == (1, ["a"])
+    print getAnsweredQuestionPart(questions[4],0)
+    assert getAnsweredQuestionPart(questions[5],0) == (3, ["this", "is", "a"])
+    assert getAnsweredQuestionPart(questions[2],1) == (5, ["this", "is", "a", "test1,", "and"])
+    assert getAnsweredQuestionPart(questions[3],1) == (3, ["a", "test,", "another"])
+    assert getAnsweredQuestionPart(questions[6],0) == "No matching question words found in question"
+    assert getAnsweredQuestionPart(questions[7],0) == "No matching question words found in question"
 
     #composeQuestionString
     assert composeQuestionString(questions[0],0) == "this is a ____"
-    assert composeQuestionString(questions[1],0) == "this is a _____, and _____"
-    assert composeQuestionString(questions[2],0) == "a ____, another ____"
-    assert composeQuestionString(questions[3],0) == "No matching question words found in question"
-    assert composeQuestionString(questions[4],0) == "No matching question words found in question"
-    assert composeQuestionString(questions[1],1) == "this is a test1, and _____"
-    assert composeQuestionString(questions[2],1) == "a test, another ____"
-    """
-    print getAnsweredQuestionString(questions[0],0)
-    print getAnsweredQuestionString(questions[1],0)
-    print getAnsweredQuestionString(questions[2],0)
-    print getAnsweredQuestionString(questions[1],1)
-    print getAnsweredQuestionString(questions[2],1)
-    """
+    #assert composeQuestionString(questions[1],0) == "a ____, this is"
+    print composeQuestionString(questions[1],0)
+    assert composeQuestionString(questions[2],0) == "this is a _____, and _____"
+    assert composeQuestionString(questions[3],0) == "a ____, another ____"
+    print composeQuestionString(questions[4],0)
+    print composeQuestionString(questions[5],0)
+    assert composeQuestionString(questions[2],1) == "this is a test1, and _____"
+    assert composeQuestionString(questions[3],1) == "a test, another ____"
+    assert composeQuestionString(questions[6],0) == "No matching question words found in question"
+    assert composeQuestionString(questions[7],0) == "No matching question words found in question"
+
     #define3LevelGame
     game = define3LevelGame(questions[0], questions[1], questions[2])
     assert game[0][0] == "Easy"
     assert game[1][0] == "Medium"
     assert game[2][0] == "Hard"
     assert game[0][1] == ["this is a test", ["test"]]
-    assert game[1][1] == ["this is a test1, and test2", ["test1", "test2"]]
-    assert game[2][1] == ["a test, another test", ["test", "test"]]
+    assert game[1][1] == ["a test, this is", ["test"]]
+    assert game[2][1] == ["this is a test1, and test2", ["test1", "test2"]]
 
     #play(game)
 
