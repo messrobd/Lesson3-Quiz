@@ -31,7 +31,8 @@ def composeQuestionString(question,q_number):
     for w in q_list:
         for q in q_words:
             if q in w:
-                w = w.replace(q, "_____")
+                b = "_" * len(q)
+                w = w.replace(q, b)
                 a_list.append(w)
                 q_list = q_list[q_index+1:]
                 q_words = q_words[q_number+1:]
@@ -69,14 +70,6 @@ question = ["this is a stupid question, luckily it's only a test",["stupid", "te
 #answerQuestion(question)
 
 def tests():
-    #findQuestionWords
-    question_words = ["test", "another_test"]
-    test_words = ["test", "test,", "negative"]
-
-    assert findQuestionWords(test_words[0],question_words) == "test"
-    assert findQuestionWords(test_words[1],question_words) == "test"
-    assert findQuestionWords(test_words[2],question_words) == None
-
     #findAllQuestionWords, composeQuestionString
     questions = [
     ["this is a test", ["test"]],
@@ -86,13 +79,13 @@ def tests():
     ["this is a test", ["neg2"]]
     ]
 
-    assert composeQuestionString(questions[0],0) == "this is a _____"
+    assert composeQuestionString(questions[0],0) == "this is a ____"
     assert composeQuestionString(questions[1],0) == "this is a _____, and _____"
-    assert composeQuestionString(questions[2],0) == "a _____, another _____"
+    assert composeQuestionString(questions[2],0) == "a ____, another ____"
     #assert composeQuestionString(questions[3],0) == "this is a neg1" negative tests fail
     #assert composeQuestionString(questions[4],0) == "this is a test" negative tests fail
     assert composeQuestionString(questions[1],1) == "this is a test1, and _____"
-    assert composeQuestionString(questions[2],1) == "a test, another _____"
+    assert composeQuestionString(questions[2],1) == "a test, another ____"
     """
     print composeQuestionString(questions[0],0)
     print composeQuestionString(questions[1],0)
