@@ -147,13 +147,16 @@ def tests():
     print getAnsweredQuestionString(questions[1],1)
     print getAnsweredQuestionString(questions[2],1)
     """
+    #define3LevelGame
     game = define3LevelGame(questions[0], questions[1], questions[2])
-
     assert game[0][0] == "Easy"
     assert game[1][0] == "Medium"
     assert game[2][0] == "Hard"
+    assert game[0][1] == ["this is a test", ["test"]]
+    assert game[1][1] == ["this is a test1, and test2", ["test1", "test2"]]
+    assert game[2][1] == ["a test, another test", ["test", "test"]]
 
-    play(game)
+    #play(game)
 
     #ran all tests
     print "ran all tests"
