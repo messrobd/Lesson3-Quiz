@@ -18,7 +18,7 @@ def pickLevel(game):
             valid_pick = True
         except:
             print "Please pick a number 0 - 2"
-    return pick 
+    return pick
 
 def findAllQuestionWords(question):
     q_list = question[0].split()
@@ -88,7 +88,9 @@ def answerQuestion(question, q_number):
 
     return
 
-def play(question):
+def play(game):
+    level = pickLevel(game)
+    question = level[1]
     q_words = question[1]
 
     for q in q_words:
@@ -146,7 +148,7 @@ def tests():
     assert game[1][0] == "Medium"
     assert game[2][0] == "Hard"
 
-    print pickLevel(game)
+    play(game)
 
     #ran all tests
     print "ran all tests"
