@@ -21,27 +21,28 @@ def pickLevel(game):
             print "Please pick a number 0 - {0}".format(len(game)-1)
     return pick
 
-def findAllQuestionWords(question):
+def makeQuestionLists(question):
     q_list = question[0].split()
     q_words = question[1]
     q_number = 0
     q_words_located = []
     for w in q_list:
         e = ""
+        w_number = q_list.index(w)
         for q in q_words:
-            if q in w:
+            if q in w and w[0] == "?":
                 e = q_number
+                q_list[w_number] = w[1:]
                 q_words = q_words[1:]
                 q_number += 1
                 break
         q_words_located.append(e)
 
-    return q_words_located
+    return q_list, q_words_located
 
 def getAnsweredQuestionPart(question,q_number):
     try:
-        q_list = question[0].split()
-        q_words_located = findAllQuestionWords(question)
+        q_list, q_words_located = makeQuestionLists(question)
         q_index = q_words_located.index(q_number)
         a_list = q_list[:q_index]
     except:
@@ -52,7 +53,7 @@ def getAnsweredQuestionPart(question,q_number):
 def composeQuestionString(question,q_number):
     try:
         q_index, a_list = getAnsweredQuestionPart(question,q_number)
-        q_list = question[0].split()[q_index:]
+        q_list = makeQuestionLists(question)[0][q_index:]
         q_words = question[1][q_number:]
     except:
         return "No matching question words found in question"
@@ -113,31 +114,31 @@ question = ["this is a stupid question, luckily it's only a test",["stupid", "te
 
 def tests():
     questions = [
-    ["this is a test", ["test"]],
-    ["a test, this is", ["test"]],
-    ["this is a test1, and test2", ["test1", "test2"]],
-    ["a test, another test", ["test", "test"]],
-    ["this is not a test, but this is a test",["test"]],
-    ["this is a test, but this is not a test",["test"]],
+    ["this is a ?test", ["test"]],
+    ["a ?test, this is", ["test"]],
+    ["this is a ?test1, and ?test2", ["test1", "test2"]],
+    ["a ?test, another ?test", ["test", "test"]],
+    ["this is not a test, but this is a ?test",["test"]],
+    ["this is a ?test, but this is not a test",["test"]],
     ["this is a neg1", ["test"]],
     ["this is a test", ["neg2"]]
     ]
     #findAllQuestionWords
-    assert findAllQuestionWords(questions[0]) == ["", "", "", 0]
-    assert findAllQuestionWords(questions[1]) == ["", 0, "", ""]
-    assert findAllQuestionWords(questions[2]) == ["", "", "", 0, "", 1]
-    assert findAllQuestionWords(questions[3]) == ["", 0, "", 1]
-    print findAllQuestionWords(questions[4])
-    assert findAllQuestionWords(questions[5]) == ["", "", "", 0, "", "", "", "", "", ""]
-    assert findAllQuestionWords(questions[6]) == ["", "", "", ""]
-    assert findAllQuestionWords(questions[7]) == ["", "", "", ""]
+    assert makeQuestionLists(questions[0])[1] == ["", "", "", 0]
+    assert makeQuestionLists(questions[1])[1] == ["", 0, "", ""]
+    assert makeQuestionLists(questions[2])[1] == ["", "", "", 0, "", 1]
+    assert makeQuestionLists(questions[3])[1] == ["", 0, "", 1]
+    assert makeQuestionLists(questions[4])[1] == ["", "", "", "", "", "", "", "", "", 0]
+    assert makeQuestionLists(questions[5])[1] == ["", "", "", 0, "", "", "", "", "", ""]
+    assert makeQuestionLists(questions[6])[1] == ["", "", "", ""]
+    assert makeQuestionLists(questions[7])[1] == ["", "", "", ""]
 
     #getAnsweredQuestionString
     assert getAnsweredQuestionPart(questions[0],0) == (3, ["this", "is", "a"])
     assert getAnsweredQuestionPart(questions[1],0) == (1, ["a"])
     assert getAnsweredQuestionPart(questions[2],0) == (3, ["this", "is", "a"])
     assert getAnsweredQuestionPart(questions[3],0) == (1, ["a"])
-    print getAnsweredQuestionPart(questions[4],0)
+    assert getAnsweredQuestionPart(questions[4],0) == (9, ["this", "is", "not", "a", "test,", "but", "this", "is", "a"])
     assert getAnsweredQuestionPart(questions[5],0) == (3, ["this", "is", "a"])
     assert getAnsweredQuestionPart(questions[2],1) == (5, ["this", "is", "a", "test1,", "and"])
     assert getAnsweredQuestionPart(questions[3],1) == (3, ["a", "test,", "another"])
@@ -149,7 +150,7 @@ def tests():
     assert composeQuestionString(questions[1],0) == "a ____, this is"
     assert composeQuestionString(questions[2],0) == "this is a _____, and _____"
     assert composeQuestionString(questions[3],0) == "a ____, another ____"
-    print composeQuestionString(questions[4],0)
+    assert composeQuestionString(questions[4],0) == "this is not a test, but this is a ____"
     assert composeQuestionString(questions[5],0) == "this is a ____, but this is not a test"
     assert composeQuestionString(questions[2],1) == "this is a test1, and _____"
     assert composeQuestionString(questions[3],1) == "a test, another ____"
@@ -161,9 +162,9 @@ def tests():
     assert game[0][0] == "Easy"
     assert game[1][0] == "Medium"
     assert game[2][0] == "Hard"
-    assert game[0][1] == ["this is a test", ["test"]]
-    assert game[1][1] == ["a test, this is", ["test"]]
-    assert game[2][1] == ["this is a test1, and test2", ["test1", "test2"]]
+    assert game[0][1] == ["this is a ?test", ["test"]]
+    assert game[1][1] == ["a ?test, this is", ["test"]]
+    assert game[2][1] == ["this is a ?test1, and ?test2", ["test1", "test2"]]
 
     #play(game)
 
