@@ -1,10 +1,3 @@
-def findQuestionWords(word, question_words):
-    #only supporting unique question words
-    for q in question_words:
-        if q in word:
-            return q
-    return
-
 def findAllQuestionWords(question):
     q_list = question[0].split()
     w_number = 0
@@ -30,27 +23,6 @@ def getAnsweredQuestionString(question,q_number):
     a_list = q_list[:q_index]
     return q_index, a_list
 
-"""
-def composeQuestionString(question,q_number):
-    inputs:
-    1. a question of the following form:
-    question = ["python is answer", ["answer"]]
-    2. question number (0-based)
-    output is a string with the remaining question words replaced with blanks.
-    question words must be unique
-
-    question_string = question[0].split()
-    question_words = question[1][q_number:]
-    blanked_q = []
-    for w in question_string:
-        q = findQuestionWords(w, question_words)
-        if q != None:
-            w = w.replace(q, "_____")
-        blanked_q.append(w)
-    blanked_q_string = " ".join(blanked_q)
-    return blanked_q_string
-"""
-
 def composeQuestionString(question,q_number):
     q_index, a_list = getAnsweredQuestionString(question,q_number)
     q_list = question[0].split()[q_index:]
@@ -58,7 +30,6 @@ def composeQuestionString(question,q_number):
 
     for w in q_list:
         for q in q_words:
-            print q_index
             if q in w:
                 w = w.replace(q, "_____")
                 a_list.append(w)
