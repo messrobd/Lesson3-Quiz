@@ -1,3 +1,4 @@
+#functions
 def define3LevelGame(easy_q, medium_q, hard_q):
     """outputs a game composed of 3 questions corresponding to the
     easy, medium, and hard levels"""
@@ -81,8 +82,8 @@ def composeQuestionString(question,q_number):
             if q in w:
                 b = "_" * len(q)
                 w = w.replace(q, b)
-                q_list = q_list[q_index+1:]
-                q_words = q_words[q_number+1:]
+                q_list = q_list[1:]
+                q_words = q_words[1:]
                 q_number += 1
                 break
             q_index += 1
@@ -131,17 +132,26 @@ def play(game):
 
     return
 
+#gameplay
+easy_question = ["""
+it is often necessary to repeat a block of code, for example when it needs to be executed
+for each of a set of entities. a ?loop is a statement that allows this. python provides 2
+loop concepts. a ?for loop iterates over every element in a list. a ?while loop continues until
+a defined condition is met; the condition must be calculated in the loop to prevent ?infinite
+repetitions.
+""", ["loop", "for", "while", "infinite"]]
+medium_question = ["", []]
+hard_question = ["", []]
 
-question = ["this is a stupid question, luckily it's only a test",["stupid", "test"]]
+game = define3LevelGame(easy_question, medium_question, hard_question)
+#play(game)
 
-#answerQuestion(question, 1)
-# play(question)
-
+#testing
 def tests():
     questions = [
     ["this is a ?test", ["test"]],
     ["a ?test, this is", ["test"]],
-    ["this is a ?test1, and ?test2", ["test1", "test2"]],
+    ["this is a ?test1, ?test2, ?test3 and ?test4", ["test1", "test2", "test3", "test4"]],
     ["a ?test, another ?test", ["test", "test"]],
     ["this is not a test, but this is a ?test",["test"]],
     ["this is a ?test, but this is not a test",["test"]],
@@ -151,7 +161,7 @@ def tests():
     #findAllQuestionWords
     assert makeQuestionLists(questions[0])[1] == ["", "", "", 0]
     assert makeQuestionLists(questions[1])[1] == ["", 0, "", ""]
-    assert makeQuestionLists(questions[2])[1] == ["", "", "", 0, "", 1]
+    assert makeQuestionLists(questions[2])[1] == ["", "", "", 0, 1, 2, "", 3]
     assert makeQuestionLists(questions[3])[1] == ["", 0, "", 1]
     assert makeQuestionLists(questions[4])[1] == ["", "", "", "", "", "", "", "", "", 0]
     assert makeQuestionLists(questions[5])[1] == ["", "", "", 0, "", "", "", "", "", ""]
@@ -165,7 +175,7 @@ def tests():
     assert getAnsweredQuestionPart(questions[3],0) == (1, ["a"])
     assert getAnsweredQuestionPart(questions[4],0) == (9, ["this", "is", "not", "a", "test,", "but", "this", "is", "a"])
     assert getAnsweredQuestionPart(questions[5],0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(questions[2],1) == (5, ["this", "is", "a", "test1,", "and"])
+    assert getAnsweredQuestionPart(questions[2],1) == (4, ["this", "is", "a", "test1,"])
     assert getAnsweredQuestionPart(questions[3],1) == (3, ["a", "test,", "another"])
     assert getAnsweredQuestionPart(questions[6],0) == "No matching question words found in question"
     assert getAnsweredQuestionPart(questions[7],0) == "No matching question words found in question"
@@ -173,11 +183,11 @@ def tests():
     #composeQuestionString
     assert composeQuestionString(questions[0],0) == "this is a ____"
     assert composeQuestionString(questions[1],0) == "a ____, this is"
-    assert composeQuestionString(questions[2],0) == "this is a _____, and _____"
+    assert composeQuestionString(questions[2],0) == "this is a _____, _____, _____ and _____"
     assert composeQuestionString(questions[3],0) == "a ____, another ____"
     assert composeQuestionString(questions[4],0) == "this is not a test, but this is a ____"
     assert composeQuestionString(questions[5],0) == "this is a ____, but this is not a test"
-    assert composeQuestionString(questions[2],1) == "this is a test1, and _____"
+    assert composeQuestionString(questions[2],1) == "this is a test1, _____, _____ and _____"
     assert composeQuestionString(questions[3],1) == "a test, another ____"
     assert composeQuestionString(questions[6],0) == "No matching question words found in question"
     assert composeQuestionString(questions[7],0) == "No matching question words found in question"
@@ -189,7 +199,7 @@ def tests():
     assert game[2][0] == "Hard"
     assert game[0][1] == ["this is a ?test", ["test"]]
     assert game[1][1] == ["a ?test, this is", ["test"]]
-    assert game[2][1] == ["this is a ?test1, and ?test2", ["test1", "test2"]]
+    assert game[2][1] == ["this is a ?test1, ?test2, ?test3 and ?test4", ["test1", "test2", "test3", "test4"]]
 
     #play(game)
 
