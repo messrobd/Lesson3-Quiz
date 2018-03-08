@@ -1,0 +1,15 @@
+it is often necessary to repeat a block of code, for example when it needs to be executed
+for each of a set of entities. a ?loop is a statement that allows this. python provides 2
+loop concepts. a ?for loop iterates over every element in a list. a ?while loop continues until
+a defined condition is met; the condition must be calculated in the loop to prevent ?infinite
+repetitions.
+
+it is important to structure python code around functions, also known as ?procedures. without it,
+?control logic can be complicated and highly nested. functions also allow you to ?reuse code, and
+helps you ?test your code.
+
+a ?list is a structured data type in python. lists have many operations in common with the ?string
+type, such as index operations. this is because strings are a also lists (of characters).
+however, lists differ in an important way: they are ?mutable. this means many variables can refer
+to the same list; this is known as ?aliasing. because of this property, a change to a list via one
+variable can propagate to other variables. 
