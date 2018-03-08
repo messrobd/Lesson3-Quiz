@@ -134,17 +134,27 @@ def play(game):
 
 #gameplay
 easy_question = ["""
-it is often necessary to repeat a block of code, for example when it needs to be executed
-for each of a set of entities. a ?loop is a statement that allows this. python provides 2
-loop concepts. a ?for loop iterates over every element in a list. a ?while loop continues until
+It is often necessary to repeat a block of code, for example when it needs to be executed
+for each of a set of entities. A ?loop is a statement that allows this. Python provides 2
+loop concepts. A ?for loop iterates over every element in a list. A ?while loop continues until
 a defined condition is met; the condition must be calculated in the loop to prevent ?infinite
 repetitions.
 """, ["loop", "for", "while", "infinite"]]
-medium_question = ["", []]
-hard_question = ["", []]
+medium_question = ["""
+It is important to structure python code around functions, also known as ?procedures. Without them,
+?control logic can be complicated and highly nested. Functions also allow you to ?reuse code, and
+helps you ?test your code by creating independently addressable units.
+""", ["procedures", "control", "reuse", "test"]]
+hard_question = ["""
+A ?list is a structured data type in python. Lists have many operations in common with the ?string
+type, such as index operations. This is because strings are also lists (of characters).
+However, lists differ in an important way: they are ?mutable. This means many variables can refer
+to the same list; this is known as ?aliasing. Because of this property, a change to a list via one 
+variable can propagate to other variables.
+""", ["list", "string", "mutable", "aliasing"]]
 
 game = define3LevelGame(easy_question, medium_question, hard_question)
-#play(game)
+play(game)
 
 #testing
 def tests():
@@ -206,4 +216,4 @@ def tests():
     #ran all tests
     print "ran all tests"
 
-tests()
+#tests()
