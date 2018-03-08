@@ -13,6 +13,7 @@ def define3LevelGame(easy_q, medium_q, hard_q):
 def pickLevel(game):
     """given a game as input, lists the game's levels at the command
     prompt. the output is the user's chosen pick (as int)"""
+
     print "Pick a level:"
     for g in game:
         print "{0} - {1}".format(game.index(g), g[0])
@@ -24,6 +25,7 @@ def pickLevel(game):
             valid_pick = True
         except:
             print "Please pick a number 0 - {0}".format(len(game)-1)
+
     return pick
 
 def makeQuestionLists(question):
@@ -36,6 +38,7 @@ def makeQuestionLists(question):
     q_words = question[1]
     q_number = 0
     q_words_located = []
+
     for w in q_list:
         e = ""
         w_number = q_list.index(w)
@@ -92,7 +95,6 @@ def composeQuestionString(question,q_number):
 
     return q_string
 
-
 def answerQuestion(question, q_number):
     """given a properly formatted question (see below) and a question number,
     shows the question string and outputs the result of checking the user's
@@ -102,6 +104,7 @@ def answerQuestion(question, q_number):
     q_string = composeQuestionString(question,q_number)
     q = question[1][q_number]
 
+    print
     print "Question {0}:".format(q_number+1)
     print q_string
     answered = False
@@ -111,7 +114,7 @@ def answerQuestion(question, q_number):
         if answer.lower() == q.lower():
             print "Correct!"
             answered = True
-            return
+            return answered
         elif lives > 1:
             lives -= 1
             print "Sorry, that's not correct. Try again ({0} attempts left): ".format(lives)
@@ -121,15 +124,21 @@ def answerQuestion(question, q_number):
 
 def play(game):
     """given a game, prompts the user to pick a level and receives their answers to
-    each question. """
+    each question. presents score at the end."""
     level = pickLevel(game)
     question = level[1]
     q_words = question[1]
 
+    score = 0
     for q in q_words:
         q_number = q_words.index(q)
-        answerQuestion(question, q_number)
+        answer = answerQuestion(question, q_number)
+        if answer:
+            score += 1
 
+    print
+    print "You're done! You scored {0} out of {1}".format(score, len(q_words))
+    
     return
 
 #gameplay
@@ -149,7 +158,7 @@ hard_question = ["""
 A ?list is a structured data type in python. Lists have many operations in common with the ?string
 type, such as index operations. This is because strings are also lists (of characters).
 However, lists differ in an important way: they are ?mutable. This means many variables can refer
-to the same list; this is known as ?aliasing. Because of this property, a change to a list via one 
+to the same list; this is known as ?aliasing. Because of this property, a change to a list via one
 variable can propagate to other variables.
 """, ["list", "string", "mutable", "aliasing"]]
 
