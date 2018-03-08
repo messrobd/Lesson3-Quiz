@@ -1,4 +1,6 @@
 def define3LevelGame(easy_q, medium_q, hard_q):
+    """outputs a game composed of 3 questions corresponding to the
+    easy, medium, and hard levels"""
     easy_level = ["Easy", easy_q]
     medium_level = ["Medium", medium_q]
     hard_level = ["Hard", hard_q]
@@ -8,6 +10,8 @@ def define3LevelGame(easy_q, medium_q, hard_q):
     return game
 
 def pickLevel(game):
+    """given a game as input, lists the game's levels at the command
+    prompt. the output is the user's chosen pick (as int)"""
     print "Pick a level:"
     for g in game:
         print "{0} - {1}".format(game.index(g), g[0])
@@ -22,6 +26,11 @@ def pickLevel(game):
     return pick
 
 def makeQuestionLists(question):
+    """given a properly formatted question (see below), outputs a list
+    of all words in the question string + a list placing question numbers
+    in their proper position in the question string. the question must be
+    formatted as follows:
+    ["the question string including a ?question word", ["question"]]"""
     q_list = question[0].split()
     q_words = question[1]
     q_number = 0
@@ -41,6 +50,11 @@ def makeQuestionLists(question):
     return q_list, q_words_located
 
 def getAnsweredQuestionPart(question,q_number):
+    """given a properly formatted question (see below) and a question number,
+    outputs the list of words preceding the question, and the position of the
+    question in the list of question words. the question must be formatted as
+    follows:
+    ["the question string including a ?question word", ["question"]]"""
     try:
         q_list, q_words_located = makeQuestionLists(question)
         q_index = q_words_located.index(q_number)
@@ -51,6 +65,10 @@ def getAnsweredQuestionPart(question,q_number):
     return q_index, a_list
 
 def composeQuestionString(question,q_number):
+    """given a properly formatted question (see below) and a question number,
+    ouputs a question string with blanks in place of the questions yet to
+    be answered. the question must be formatted as follows:
+    ["the question string including a ?question word", ["question"]]"""
     try:
         q_index, a_list = getAnsweredQuestionPart(question,q_number)
         q_list = makeQuestionLists(question)[0][q_index:]
@@ -75,6 +93,11 @@ def composeQuestionString(question,q_number):
 
 
 def answerQuestion(question, q_number):
+    """given a properly formatted question (see below) and a question number,
+    shows the question string and outputs the result of checking the user's
+    answer. the user has 5 attempts to answer correctly, after which the correct
+    answer is shown. the question must be formatted as follows:
+    ["the question string including a ?question word", ["question"]]"""
     q_string = composeQuestionString(question,q_number)
     q = question[1][q_number]
 
@@ -96,6 +119,8 @@ def answerQuestion(question, q_number):
             return
 
 def play(game):
+    """given a game, prompts the user to pick a level and receives their answers to
+    each question. """
     level = pickLevel(game)
     question = level[1]
     q_words = question[1]
