@@ -42,24 +42,22 @@ def prepareQuestion(question):
     q_words_index = 1
     try:
         q_list = question[q_string_index].split()
-        q_words = question[q_string_index]
+        q_words = question[q_words_index]
     except:
         "Invalid question format"
 
     return q_list, q_words
 
-def makeQuestionLists(question):
+def locateQuestionWords(q_list, q_words):
     """given a properly formatted question (see below), outputs a list
     of all words in the question string + a list placing question numbers
     in their proper position in the question string. the question must be
     formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
-    q_string_index, q_words_index = validateQuestion(question)
-    q_list = question[q_string_index].split()
-    q_words = question[q_string_index]
     q_tag, q_tag_index = "?", 0
     q_number = 0
     q_word_locations = []
+    q_list_detagged = []
 
     for word in q_list:
         element = ""
@@ -67,38 +65,40 @@ def makeQuestionLists(question):
         for question in q_words:
             if question in word and word[q_tag_index] == q_tag:
                 element = q_number
-                q_list[w_number] = word[1:]
+                word = word[1:]
                 q_words = q_words[1:]
                 q_number += 1
                 break
-        q_words_located.append(element)
+        q_word_locations.append(element)
+        q_list_detagged.append(word)
 
-    return q_list, q_words_located
+    return q_word_locations, q_list_detagged
 
-def getAnsweredQuestionPart(question,q_number):
+def getAnsweredQuestionPart(q_list, q_words, q_number):
     """given a properly formatted question (see below) and a question number,
     outputs the list of words preceding the question, and the position of the
     question in the list of question words. the question must be formatted as
     follows:
     ["the question string including a ?question word", ["question"]]"""
+    q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
     try:
-        q_list, q_words_located = makeQuestionLists(question)
-        q_index = q_words_located.index(q_number)
-        a_list = q_list[:q_index]
+        q_index = q_word_locations.index(q_number)
     except:
         return "No matching question words found in question"
 
+    a_list = q_list_detagged[:q_index]
+
     return q_index, a_list
 
-def composeQuestionString(question,q_number):
+def composeQuestionString(q_list, q_words, q_number):
     """given a properly formatted question (see below) and a question number,
     ouputs a question string with blanks in place of the questions yet to
     be answered. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
     try:
-        q_index, a_list = getAnsweredQuestionPart(question,q_number)
-        q_list = makeQuestionLists(question)[0][q_index:]#magic number
-        q_words = question[1][q_number:]#magic number
+        q_index, a_list = getAnsweredQuestionPart(q_list, question, q_number)
+        q_list = q_list[q_index:]
+        q_words = q_words[q_number:]
     except:
         return "No matching question words found in question"
 
@@ -117,14 +117,14 @@ def composeQuestionString(question,q_number):
 
     return q_string
 
-def answerQuestion(question, q_number):
+def answerQuestion(q_list, q_words, q_number):
     """given a properly formatted question (see below) and a question number,
     shows the question string and outputs the result of checking the user's
     answer. the user has 5 attempts to answer correctly, after which the correct
     answer is shown. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
-    q_string = composeQuestionString(question,q_number)
-    q_word = question[1][q_number]#magic number
+    q_string = composeQuestionString(q_list, q_words, q_number)
+    q_word = q_words[q_number]
 
     print
     print "Question {0}:".format(q_number+1)
@@ -154,7 +154,7 @@ def play(game, level_label_index, level_question_index):
     score = 0
     for question in q_words:
         q_number = q_words.index(question)
-        answer = answerQuestion(level_question, q_number)
+        answer = answerQuestion(q_list, q_words, q_number)
         if answer:
             score += 1
 
@@ -199,39 +199,76 @@ def tests():
     ["this is a neg1", ["test"]],
     ["this is a test", ["neg2"]]
     ]
+    #prepareQuestion
+    assert prepareQuestion(questions[0]) == (["this", "is", "a", "?test"], ["test"])
+    assert prepareQuestion(questions[1]) == (["a", "?test,", "this", "is"], ["test"])
+    assert prepareQuestion(questions[2]) == (["this", "is", "a", "?test1,", "?test2,", "?test3", "and", "?test4"], ['test1', 'test2', 'test3', 'test4'])
+    assert prepareQuestion(questions[3]) == (["a", "?test,", "another", "?test"], ["test", "test"])
+    assert prepareQuestion(questions[4]) == (["this", "is", "not", "a", "test,", "but", "this", "is", "a", "?test"],["test"])
+    assert prepareQuestion(questions[5]) == (["this", "is", "a", "?test,", "but", "this", "is", "not", "a", "test"],["test"])
+    assert prepareQuestion(questions[6]) == (["this", "is", "a", "neg1"], ["test"])
+    assert prepareQuestion(questions[7]) == (["this", "is", "a", "test"], ["neg2"])
+
     #findAllQuestionWords
-    assert makeQuestionLists(questions[0])[1] == ["", "", "", 0]
-    assert makeQuestionLists(questions[1])[1] == ["", 0, "", ""]
-    assert makeQuestionLists(questions[2])[1] == ["", "", "", 0, 1, 2, "", 3]
-    assert makeQuestionLists(questions[3])[1] == ["", 0, "", 1]
-    assert makeQuestionLists(questions[4])[1] == ["", "", "", "", "", "", "", "", "", 0]
-    assert makeQuestionLists(questions[5])[1] == ["", "", "", 0, "", "", "", "", "", ""]
-    assert makeQuestionLists(questions[6])[1] == ["", "", "", ""]
-    assert makeQuestionLists(questions[7])[1] == ["", "", "", ""]
+    q_list_0, q_words_0 = prepareQuestion(questions[0])
+    q_list_1, q_words_1 = prepareQuestion(questions[1])
+    q_list_2, q_words_2 = prepareQuestion(questions[2])
+    q_list_3, q_words_3 = prepareQuestion(questions[3])
+    q_list_4, q_words_4 = prepareQuestion(questions[4])
+    q_list_5, q_words_5 = prepareQuestion(questions[5])
+    q_list_6, q_words_6 = prepareQuestion(questions[6])
+    q_list_7, q_words_7 = prepareQuestion(questions[7])
+
+    assert locateQuestionWords(q_list_0, q_words_0)[0] == ["", "", "", 0]
+    assert locateQuestionWords(q_list_1, q_words_1)[0] == ["", 0, "", ""]
+    assert locateQuestionWords(q_list_2, q_words_2)[0] == ["", "", "", 0, 1, 2, "", 3]
+    assert locateQuestionWords(q_list_3, q_words_3)[0] == ["", 0, "", 1]
+    assert locateQuestionWords(q_list_4, q_words_4)[0] == ["", "", "", "", "", "", "", "", "", 0]
+    assert locateQuestionWords(q_list_5, q_words_5)[0] == ["", "", "", 0, "", "", "", "", "", ""]
+    assert locateQuestionWords(q_list_6, q_words_6)[0] == ["", "", "", ""]
+    assert locateQuestionWords(q_list_7, q_words_7)[0] == ["", "", "", ""]
 
     #getAnsweredQuestionString
-    assert getAnsweredQuestionPart(questions[0],0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(questions[1],0) == (1, ["a"])
-    assert getAnsweredQuestionPart(questions[2],0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(questions[3],0) == (1, ["a"])
-    assert getAnsweredQuestionPart(questions[4],0) == (9, ["this", "is", "not", "a", "test,", "but", "this", "is", "a"])
-    assert getAnsweredQuestionPart(questions[5],0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(questions[2],1) == (4, ["this", "is", "a", "test1,"])
-    assert getAnsweredQuestionPart(questions[3],1) == (3, ["a", "test,", "another"])
-    assert getAnsweredQuestionPart(questions[6],0) == "No matching question words found in question"
-    assert getAnsweredQuestionPart(questions[7],0) == "No matching question words found in question"
+    q_list_0, q_words_0 = prepareQuestion(questions[0])
+    q_list_1, q_words_1 = prepareQuestion(questions[1])
+    q_list_2, q_words_2 = prepareQuestion(questions[2])
+    q_list_3, q_words_3 = prepareQuestion(questions[3])
+    q_list_4, q_words_4 = prepareQuestion(questions[4])
+    q_list_5, q_words_5 = prepareQuestion(questions[5])
+    q_list_6, q_words_6 = prepareQuestion(questions[6])
+    q_list_7, q_words_7 = prepareQuestion(questions[7])
+
+    assert getAnsweredQuestionPart(q_list_0, q_words_0,0) == (3, ["this", "is", "a"])
+    assert getAnsweredQuestionPart(q_list_1, q_words_1,0) == (1, ["a"])
+    assert getAnsweredQuestionPart(q_list_2, q_words_2,0) == (3, ["this", "is", "a"])
+    assert getAnsweredQuestionPart(q_list_3, q_words_3,0) == (1, ["a"])
+    assert getAnsweredQuestionPart(q_list_4, q_words_4,0) == (9, ["this", "is", "not", "a", "test,", "but", "this", "is", "a"])
+    assert getAnsweredQuestionPart(q_list_5, q_words_5,0) == (3, ["this", "is", "a"])
+    assert getAnsweredQuestionPart(q_list_2, q_words_2,1) == (4, ["this", "is", "a", "test1,"])
+    assert getAnsweredQuestionPart(q_list_3, q_words_3,1) == (3, ["a", "test,", "another"])
+    assert getAnsweredQuestionPart(q_list_6, q_words_6,0) == "No matching question words found in question"
+    assert getAnsweredQuestionPart(q_list_7, q_words_7,0) == "No matching question words found in question"
 
     #composeQuestionString
-    assert composeQuestionString(questions[0],0) == "this is a ____"
-    assert composeQuestionString(questions[1],0) == "a ____, this is"
-    assert composeQuestionString(questions[2],0) == "this is a _____, _____, _____ and _____"
-    assert composeQuestionString(questions[3],0) == "a ____, another ____"
-    assert composeQuestionString(questions[4],0) == "this is not a test, but this is a ____"
-    assert composeQuestionString(questions[5],0) == "this is a ____, but this is not a test"
-    assert composeQuestionString(questions[2],1) == "this is a test1, _____, _____ and _____"
-    assert composeQuestionString(questions[3],1) == "a test, another ____"
-    assert composeQuestionString(questions[6],0) == "No matching question words found in question"
-    assert composeQuestionString(questions[7],0) == "No matching question words found in question"
+    q_list_0, q_words_0 = prepareQuestion(questions[0])
+    q_list_1, q_words_1 = prepareQuestion(questions[1])
+    q_list_2, q_words_2 = prepareQuestion(questions[2])
+    q_list_3, q_words_3 = prepareQuestion(questions[3])
+    q_list_4, q_words_4 = prepareQuestion(questions[4])
+    q_list_5, q_words_5 = prepareQuestion(questions[5])
+    q_list_6, q_words_6 = prepareQuestion(questions[6])
+    q_list_7, q_words_7 = prepareQuestion(questions[7])
+
+    assert composeQuestionString(q_list_0, q_words_0,0) == "this is a ____"
+    assert composeQuestionString(q_list_1, q_words_1,0) == "a ____, this is"
+    assert composeQuestionString(q_list_2, q_words_2,0) == "this is a _____, _____, _____ and _____"
+    assert composeQuestionString(q_list_3, q_words_3,0) == "a ____, another ____"
+    assert composeQuestionString(q_list_4, q_words_4,0) == "this is not a test, but this is a ____"
+    assert composeQuestionString(q_list_5, q_words_5,0) == "this is a ____, but this is not a test"
+    assert composeQuestionString(q_list_2, q_words_2,1) == "this is a test1, _____, _____ and _____"
+    assert composeQuestionString(q_list_3, q_words_3,1) == "a test, another ____"
+    assert composeQuestionString(q_list_6, q_words_6,0) == "No matching question words found in question"
+    assert composeQuestionString(q_list_7, q_words_7,0) == "No matching question words found in question"
 
     #define3LevelGame
     game = define3LevelGame(questions[0], questions[1], questions[2])
