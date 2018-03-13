@@ -15,8 +15,8 @@ def pickLevel(game):
     prompt. the output is the user's chosen pick (as int)"""
 
     print "Pick a level:"
-    for g in game:
-        print "{0} - {1}".format(game.index(g), g[0])
+    for level in game:
+        print "{0} - {1}".format(game.index(level), level[0])
     valid_pick = False
     while valid_pick == False:
         pick = raw_input()
@@ -39,17 +39,17 @@ def makeQuestionLists(question):
     q_number = 0
     q_words_located = []
 
-    for w in q_list:
-        e = ""
-        w_number = q_list.index(w)
-        for q in q_words:
-            if q in w and w[0] == "?":
-                e = q_number
-                q_list[w_number] = w[1:]
+    for word in q_list:
+        element = ""
+        w_number = q_list.index(word)
+        for question in q_words:
+            if question in word and word[0] == "?":
+                element = q_number
+                q_list[w_number] = word[1:]
                 q_words = q_words[1:]
                 q_number += 1
                 break
-        q_words_located.append(e)
+        q_words_located.append(element)
 
     return q_list, q_words_located
 
@@ -80,17 +80,17 @@ def composeQuestionString(question,q_number):
     except:
         return "No matching question words found in question"
 
-    for w in q_list:
-        for q in q_words:
-            if q in w:
-                b = "_" * len(q)
-                w = w.replace(q, b)
+    for word in q_list:
+        for question in q_words:
+            if question in word:
+                blank = "_" * len(question)
+                word = word.replace(question, blank)
                 q_list = q_list[1:]
                 q_words = q_words[1:]
                 q_number += 1
                 break
             q_index += 1
-        a_list.append(w)
+        a_list.append(word)
     q_string = " ".join(a_list)
 
     return q_string
@@ -102,7 +102,7 @@ def answerQuestion(question, q_number):
     answer is shown. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
     q_string = composeQuestionString(question,q_number)
-    q = question[1][q_number]
+    question = question[1][q_number]
 
     print
     print "Question {0}:".format(q_number+1)
@@ -111,7 +111,7 @@ def answerQuestion(question, q_number):
     lives = 5
     while answered == False and lives >= 1:
         answer = raw_input("Answer: ")
-        if answer.lower() == q.lower():
+        if answer.lower() == question.lower():
             print "Correct!"
             answered = True
             return answered
@@ -119,26 +119,26 @@ def answerQuestion(question, q_number):
             lives -= 1
             print "Sorry, that's not correct. Try again ({0} attempts left): ".format(lives)
         else:
-            print "Unlucky. The answer is {0}".format(q.upper())
+            print "Unlucky. The answer is {0}".format(question.upper())
             return
 
 def play(game):
     """given a game, prompts the user to pick a level and receives their answers to
     each question. presents score at the end."""
     level = pickLevel(game)
-    question = level[1]
-    q_words = question[1]
+    level_question = level[1]
+    q_words = level_question[1]
 
     score = 0
-    for q in q_words:
-        q_number = q_words.index(q)
-        answer = answerQuestion(question, q_number)
+    for question in q_words:
+        q_number = q_words.index(question)
+        answer = answerQuestion(level_question, q_number)
         if answer:
             score += 1
 
     print
     print "You're done! You scored {0} out of {1}".format(score, len(q_words))
-    
+
     return
 
 #gameplay
@@ -162,8 +162,8 @@ to the same list; this is known as ?aliasing. Because of this property, a change
 variable can propagate to other variables.
 """, ["list", "string", "mutable", "aliasing"]]
 
-game = define3LevelGame(easy_question, medium_question, hard_question)
-play(game)
+#game = define3LevelGame(easy_question, medium_question, hard_question)
+#play(game)
 
 #testing
 def tests():
@@ -225,4 +225,4 @@ def tests():
     #ran all tests
     print "ran all tests"
 
-#tests()
+tests()

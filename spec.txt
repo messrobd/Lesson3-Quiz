@@ -1,0 +1,56 @@
+"fill in the blanks" quiz. suggested topic: python
+
+1. ask user to choose a level <easy | medium | hard>
+2. show user a question containing >= 4 blanks
+3. ask for word in first blank
+4. check and return answer
+  - correct: replace blank with answer and prompt for next blank
+  - incorrect: prompt to try again
+5. repeat 3-4 for remaining blanks
+
+input: user's answer word
+output: result of checking user's word
+
+generate questions V1:
+1. compose full sentence
+2. identify word/s which will be blanked out
+
+pose questions V1:
+0. given that I have a question to ask [INPUT]
+1. show question string with blanks in place of the identified words [OUTPUT]
+2. prompt user to provide answer (numbered)
+
+pose questions V2:
+0. given that I have a question to ask, and a list of correct answers
+1. show the question string
+
+check answers:
+1. compare the user's answer to the corresponding blank
+2. return the result (correct/incorrect)
+3. if correct, compose a new string [OUTPUT] from the question (including blanks) [INPUT] and the answer, and return to "pose question"
+4. if incorrect, prompt to try again
+
+compose a new string:
+1. get the question string [INPUT] up to the current question [INPUT], no blanks
+2. for the remainder of the string, replace question words with blanks
+
+pick a level:
+1. define levels
+2. define questions for each level
+3. associate questions with levels
+4. prompt the user to pick a level from the defined set
+5. get the associated question
+6. pose the question
+
+
+____
+issues with v1:
+* complicated question input format
+* partial matches between questions and question list items
+* only supports one question
+
+issues with v2:
+* try/catch blocks keyboard termination
+* question word substitution fragile
+* infinite tries
+* findAllQuestionWords only outputs q_words_located up to last question 
