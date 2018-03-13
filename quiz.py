@@ -102,18 +102,20 @@ def composeQuestionString(q_list, q_words, q_number):
 
     return q_string
 
-def answerQuestion(q_list, q_words, q_number):
+def askQuestion(q_list, q_words, q_number):
+    q_string = composeQuestionString(q_list, q_words, q_number)
+    print "Question {0}:".format(q_number+1)
+    print q_string
+    print
+
+def checkAnswer(q_words, q_number):
     """given a properly formatted question (see below) and a question number,
     shows the question string and outputs the result of checking the user's
     answer. the user has 5 attempts to answer correctly, after which the correct
     answer is shown. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
-    q_string = composeQuestionString(q_list, q_words, q_number)
     q_word = q_words[q_number]
 
-    print
-    print "Question {0}:".format(q_number+1)
-    print q_string
     answered = False
     lives = 5
     while answered == False and lives >= 1:
@@ -139,7 +141,8 @@ def play(game, level_label_index, level_question_index):
     score = 0
     for question in q_words:
         q_number = q_words.index(question)
-        answer = answerQuestion(q_list, q_words, q_number)
+        askQuestion(q_list, q_words, q_number)
+        answer = checkAnswer(q_words, q_number)
         if answer:
             score += 1
 
