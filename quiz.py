@@ -74,22 +74,6 @@ def locateQuestionWords(q_list, q_words):
 
     return q_word_locations, q_list_detagged
 
-def getAnsweredQuestionPart(q_list, q_words, q_number):
-    """given a properly formatted question (see below) and a question number,
-    outputs the list of words preceding the question, and the position of the
-    question in the list of question words. the question must be formatted as
-    follows:
-    ["the question string including a ?question word", ["question"]]"""
-    q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
-    try:
-        q_index = q_word_locations.index(q_number)
-    except:
-        return "No matching question words found in question"
-
-    a_list = q_list_detagged[:q_index]
-
-    return q_index, a_list
-
 def composeQuestionString(q_list, q_words, q_number):
     """given a properly formatted question (see below) and a question number,
     ouputs a question string with blanks in place of the questions yet to
@@ -228,27 +212,6 @@ def tests():
     assert locateQuestionWords(q_list_5, q_words_5)[0] == ["", "", "", 0, "", "", "", "", "", ""]
     assert locateQuestionWords(q_list_6, q_words_6)[0] == ["", "", "", ""]
     assert locateQuestionWords(q_list_7, q_words_7)[0] == ["", "", "", ""]
-
-    #getAnsweredQuestionString
-    q_list_0, q_words_0 = prepareQuestion(questions[0])
-    q_list_1, q_words_1 = prepareQuestion(questions[1])
-    q_list_2, q_words_2 = prepareQuestion(questions[2])
-    q_list_3, q_words_3 = prepareQuestion(questions[3])
-    q_list_4, q_words_4 = prepareQuestion(questions[4])
-    q_list_5, q_words_5 = prepareQuestion(questions[5])
-    q_list_6, q_words_6 = prepareQuestion(questions[6])
-    q_list_7, q_words_7 = prepareQuestion(questions[7])
-
-    assert getAnsweredQuestionPart(q_list_0, q_words_0,0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(q_list_1, q_words_1,0) == (1, ["a"])
-    assert getAnsweredQuestionPart(q_list_2, q_words_2,0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(q_list_3, q_words_3,0) == (1, ["a"])
-    assert getAnsweredQuestionPart(q_list_4, q_words_4,0) == (9, ["this", "is", "not", "a", "test,", "but", "this", "is", "a"])
-    assert getAnsweredQuestionPart(q_list_5, q_words_5,0) == (3, ["this", "is", "a"])
-    assert getAnsweredQuestionPart(q_list_2, q_words_2,1) == (4, ["this", "is", "a", "test1,"])
-    assert getAnsweredQuestionPart(q_list_3, q_words_3,1) == (3, ["a", "test,", "another"])
-    assert getAnsweredQuestionPart(q_list_6, q_words_6,0) == "No matching question words found in question"
-    assert getAnsweredQuestionPart(q_list_7, q_words_7,0) == "No matching question words found in question"
 
     #composeQuestionString
     q_list_0, q_words_0 = prepareQuestion(questions[0])
