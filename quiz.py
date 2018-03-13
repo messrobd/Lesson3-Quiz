@@ -18,7 +18,7 @@ def pickLevel(game, level_label_index):
 
     print "Pick a level:"
     for level in game:
-        print "{0} - {1}".format(game.index(level), level[level_label_index])#magic number
+        print "{0} - {1}".format(game.index(level), level[level_label_index])
     valid_pick = False
     while valid_pick == False:
         pick = raw_input()
@@ -104,7 +104,7 @@ def answerQuestion(question, q_number):
     answer is shown. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
     q_string = composeQuestionString(question,q_number)
-    question = question[1][q_number]#magic number
+    q_word = question[1][q_number]#magic number
 
     print
     print "Question {0}:".format(q_number+1)
@@ -113,7 +113,7 @@ def answerQuestion(question, q_number):
     lives = 5
     while answered == False and lives >= 1:
         answer = raw_input("Answer: ")
-        if answer.lower() == question.lower():
+        if answer.lower() == q_word.lower():
             print "Correct!"
             answered = True
             return answered
@@ -121,14 +121,14 @@ def answerQuestion(question, q_number):
             lives -= 1
             print "Sorry, that's not correct. Try again ({0} attempts left): ".format(lives)
         else:
-            print "Unlucky. The answer is {0}".format(question.upper())
+            print "Unlucky. The answer is {0}".format(q_word.upper())
             return
 
 def play(game, level_label_index, level_question_index):
     """given a game, prompts the user to pick a level and receives their answers to
     each question. presents score at the end."""
     level = pickLevel(game, level_label_index)
-    level_question = level[level_question_index]#magic number
+    level_question = level[level_question_index]
     q_words = level_question[1]#magic number
 
     score = 0
