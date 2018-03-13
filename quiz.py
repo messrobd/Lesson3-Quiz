@@ -38,6 +38,7 @@ def makeQuestionLists(question):
     ["the question string including a ?question word", ["question"]]"""
     q_list = question[0].split()#magic number
     q_words = question[1]#magic number
+    q_tag, q_tag_index = "?", 0
     q_number = 0
     q_words_located = []
 
@@ -45,7 +46,7 @@ def makeQuestionLists(question):
         element = ""
         w_number = q_list.index(word)
         for question in q_words:
-            if question in word and word[0] == "?":#magic number
+            if question in word and word[q_tag_index] == q_tag:
                 element = q_number
                 q_list[w_number] = word[1:]
                 q_words = q_words[1:]
