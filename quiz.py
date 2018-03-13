@@ -106,7 +106,6 @@ def askQuestion(q_list, q_words, q_number):
     q_string = composeQuestionString(q_list, q_words, q_number)
     print "Question {0}:".format(q_number+1)
     print q_string
-    print
 
 def checkAnswer(q_words, q_number):
     """given a properly formatted question (see below) and a question number,
@@ -146,7 +145,6 @@ def play(game, level_label_index, level_question_index):
         if answer:
             score += 1
 
-    print
     print "You're done! You scored {0} out of {1}".format(score, len(q_words))
 
     return
