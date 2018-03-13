@@ -30,17 +30,36 @@ def pickLevel(game, level_label_index):
 
     return pick
 
+def prepareQuestion(question):
+
+    q_valid_length = 2
+    try:
+        assert len(question) == q_valid_length
+    except:
+        "Invalid question format: missing field"
+
+    q_string_index = 0
+    q_words_index = 1
+    try:
+        q_list = question[q_string_index].split()
+        q_words = question[q_string_index]
+    except:
+        "Invalid question format"
+
+    return q_list, q_words
+
 def makeQuestionLists(question):
     """given a properly formatted question (see below), outputs a list
     of all words in the question string + a list placing question numbers
     in their proper position in the question string. the question must be
     formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
-    q_list = question[0].split()#magic number
-    q_words = question[1]#magic number
+    q_string_index, q_words_index = validateQuestion(question)
+    q_list = question[q_string_index].split()
+    q_words = question[q_string_index]
     q_tag, q_tag_index = "?", 0
     q_number = 0
-    q_words_located = []
+    q_word_locations = []
 
     for word in q_list:
         element = ""
@@ -130,7 +149,7 @@ def play(game, level_label_index, level_question_index):
     each question. presents score at the end."""
     level = pickLevel(game, level_label_index)
     level_question = level[level_question_index]
-    q_words = level_question[1]#magic number
+    q_list, q_words = prepareQuestion(level_question)
 
     score = 0
     for question in q_words:
