@@ -7,16 +7,18 @@ def define3LevelGame(easy_q, medium_q, hard_q):
     hard_level = ["Hard", hard_q]
 
     game = [easy_level, medium_level, hard_level]
+    level_label_index = 0
+    level_question_index = 1
 
-    return game
+    return game, level_label_index, level_question_index
 
-def pickLevel(game):
+def pickLevel(game, level_label_index):
     """given a game as input, lists the game's levels at the command
     prompt. the output is the user's chosen pick (as int)"""
 
     print "Pick a level:"
     for level in game:
-        print "{0} - {1}".format(game.index(level), level[0])
+        print "{0} - {1}".format(game.index(level), level[level_label_index])#magic number
     valid_pick = False
     while valid_pick == False:
         pick = raw_input()
@@ -34,8 +36,8 @@ def makeQuestionLists(question):
     in their proper position in the question string. the question must be
     formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
-    q_list = question[0].split()
-    q_words = question[1]
+    q_list = question[0].split()#magic number
+    q_words = question[1]#magic number
     q_number = 0
     q_words_located = []
 
@@ -43,7 +45,7 @@ def makeQuestionLists(question):
         element = ""
         w_number = q_list.index(word)
         for question in q_words:
-            if question in word and word[0] == "?":
+            if question in word and word[0] == "?":#magic number
                 element = q_number
                 q_list[w_number] = word[1:]
                 q_words = q_words[1:]
@@ -75,8 +77,8 @@ def composeQuestionString(question,q_number):
     ["the question string including a ?question word", ["question"]]"""
     try:
         q_index, a_list = getAnsweredQuestionPart(question,q_number)
-        q_list = makeQuestionLists(question)[0][q_index:]
-        q_words = question[1][q_number:]
+        q_list = makeQuestionLists(question)[0][q_index:]#magic number
+        q_words = question[1][q_number:]#magic number
     except:
         return "No matching question words found in question"
 
@@ -102,7 +104,7 @@ def answerQuestion(question, q_number):
     answer is shown. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
     q_string = composeQuestionString(question,q_number)
-    question = question[1][q_number]
+    question = question[1][q_number]#magic number
 
     print
     print "Question {0}:".format(q_number+1)
@@ -122,12 +124,12 @@ def answerQuestion(question, q_number):
             print "Unlucky. The answer is {0}".format(question.upper())
             return
 
-def play(game):
+def play(game, level_label_index, level_question_index):
     """given a game, prompts the user to pick a level and receives their answers to
     each question. presents score at the end."""
-    level = pickLevel(game)
-    level_question = level[1]
-    q_words = level_question[1]
+    level = pickLevel(game, level_label_index)
+    level_question = level[level_question_index]#magic number
+    q_words = level_question[1]#magic number
 
     score = 0
     for question in q_words:
@@ -162,8 +164,8 @@ to the same list; this is known as ?aliasing. Because of this property, a change
 variable can propagate to other variables.
 """, ["list", "string", "mutable", "aliasing"]]
 
-#game = define3LevelGame(easy_question, medium_question, hard_question)
-#play(game)
+#game, level_label_index, level_question_index = define3LevelGame(easy_question, medium_question, hard_question)
+#play(game, level_label_index, level_question_index)
 
 #testing
 def tests():
@@ -213,12 +215,12 @@ def tests():
 
     #define3LevelGame
     game = define3LevelGame(questions[0], questions[1], questions[2])
-    assert game[0][0] == "Easy"
-    assert game[1][0] == "Medium"
-    assert game[2][0] == "Hard"
-    assert game[0][1] == ["this is a ?test", ["test"]]
-    assert game[1][1] == ["a ?test, this is", ["test"]]
-    assert game[2][1] == ["this is a ?test1, ?test2, ?test3 and ?test4", ["test1", "test2", "test3", "test4"]]
+    assert game[0][0][0] == "Easy"
+    assert game[0][1][0] == "Medium"
+    assert game[0][2][0] == "Hard"
+    assert game[0][0][1] == ["this is a ?test", ["test"]]
+    assert game[0][1][1] == ["a ?test, this is", ["test"]]
+    assert game[0][2][1] == ["this is a ?test1, ?test2, ?test3 and ?test4", ["test1", "test2", "test3", "test4"]]
 
     #play(game)
 
