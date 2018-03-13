@@ -95,23 +95,24 @@ def composeQuestionString(q_list, q_words, q_number):
     ouputs a question string with blanks in place of the questions yet to
     be answered. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
+    q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
     try:
-        q_index, a_list = getAnsweredQuestionPart(q_list, question, q_number)
-        q_list = q_list[q_index:]
-        q_words = q_words[q_number:]
+        q_index = q_word_locations.index(q_number)
     except:
         return "No matching question words found in question"
 
-    for word in q_list:
+    a_list = q_list_detagged[:q_index]
+    q_list_detagged = q_list_detagged[q_index:]
+
+    for word in q_list_detagged:
         for question in q_words:
             if question in word:
                 blank = "_" * len(question)
                 word = word.replace(question, blank)
-                q_list = q_list[1:]
+                q_list_detagged = q_list_detagged[1:]
                 q_words = q_words[1:]
                 q_number += 1
                 break
-            q_index += 1
         a_list.append(word)
     q_string = " ".join(a_list)
 
