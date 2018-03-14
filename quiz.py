@@ -135,8 +135,7 @@ def composeResponseString(q_list, q_words, q_number):
 
 def askQuestion(q_list, q_words, q_number):
     q_string = composeQuestionString(q_list, q_words, q_number)
-    print "Question {0}:".format(q_number+1)
-    print q_string
+    return ("Question: \n" + q_string)
 
 def checkAnswer(q_words, q_number):
     """given a properly formatted question (see below) and a question number,
@@ -179,7 +178,7 @@ def play(game, level_label_index, level_question_index):
     score = 0
     for question in q_words:
         q_number = q_words.index(question)
-        askQuestion(q_list, q_words, q_number)
+        print askQuestion(q_list, q_words, q_number)
         answer = checkAnswer(q_words, q_number)
         print (giveResponse(q_list, q_words, q_number, answer) + "\n")
         if answer:
