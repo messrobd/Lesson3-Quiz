@@ -262,7 +262,7 @@ def play(game):
     1. Behaviour: initiates a game, and steps through the question words in the
     chosen level until they have all been attempted
     2. Inputs: a game
-    3. Outputs: the game result, in the form of a score  
+    3. Outputs: the game result, in the form of a score
     """
     gamelevels, level_label_index, level_question_index = game
     level = pickLevel(gamelevels, level_label_index)
@@ -464,4 +464,4 @@ def tests():
     #ran all tests
     print "ran all tests"
 
-tests()
+#tests()
