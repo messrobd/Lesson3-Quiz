@@ -149,7 +149,7 @@ def checkAnswer(q_words, q_number):
     answered = False
     lives = 5
     while answered == False and lives >= 1:
-        answer = raw_input("Answer: ")
+        answer = raw_input("Answer to blank number {0}: ".format(q_number+1))
         if answer.lower() == q_word.lower():
             answered = True
             return answered
@@ -164,9 +164,9 @@ def giveResponse(q_list, q_words, q_number, answer):
     q_word = q_words[q_number]
 
     if answer:
-        return ("Correct! \n" + r_string)
+        return ("\nCorrect! \n" + r_string)
     else:
-        return "Unlucky. The answer is {0}".format(q_word.upper())
+        return ("\nUnlucky. The answer is {0} \n".format(q_word.upper()) + r_string)
 
 
 def play(game, level_label_index, level_question_index):
