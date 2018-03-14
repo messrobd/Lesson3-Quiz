@@ -85,14 +85,12 @@ def getAnsweredPart(q_list, q_words, q_number):
 
     return a_list
 
-def getUnansweredPart(q_list, q_words, q_number):
+def makeUnansweredPart(q_list, q_words, q_number):
     q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
     try:
         q_index = q_word_locations.index(q_number)
     except:
         return "No matching question words found in question"
-
-    ua_word = q_list_detagged[q_index].upper()
 
     q_list_detagged = q_list_detagged[q_index:]
 
@@ -108,7 +106,19 @@ def getUnansweredPart(q_list, q_words, q_number):
                 break
         ua_list.append(word)
 
-    return ua_list, ua_word
+    return ua_list
+
+def makeCurrentAnswerElement(q_list, q_words, q_number):
+    q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
+    try:
+        q_index = q_word_locations.index(q_number)
+    except:
+        return "No matching question words found in question"
+
+    ua_word = q_list_detagged[q_index].upper()
+
+    return ua_word
+
 
 def composeQuestionString(q_list, q_words):
     """given a properly formatted question (see below) and a question number,
@@ -117,8 +127,7 @@ def composeQuestionString(q_list, q_words):
     ["the question string including a ?question word", ["question"]]"""
     q_number = 0
     a_list = getAnsweredPart(q_list, q_words, q_number)
-    ua_list_index = 0
-    ua_list = getUnansweredPart(q_list, q_words, q_number)[0]
+    ua_list = makeUnansweredPart(q_list, q_words, q_number)
 
     q_string = " ".join(a_list + ua_list)
 
@@ -126,7 +135,8 @@ def composeQuestionString(q_list, q_words):
 
 def composeResponseString(q_list, q_words, q_number):
     a_list = getAnsweredPart(q_list, q_words, q_number)
-    ua_list, ua_word = getUnansweredPart(q_list, q_words, q_number)
+    ua_list  = makeUnansweredPart(q_list, q_words, q_number)
+    ua_word = makeCurrentAnswerElement(q_list, q_words, q_number)
 
     a_list.append(ua_word)
 
@@ -276,7 +286,7 @@ def tests():
     assert getAnsweredPart(q_list_6, q_words_6,0) == "No matching question words found in question"
     assert getAnsweredPart(q_list_7, q_words_7,0) == "No matching question words found in question"
 
-    #getUnansweredPart
+    #makeUnansweredPart
     q_list_0, q_words_0 = prepareQuestion(questions[0])
     q_list_1, q_words_1 = prepareQuestion(questions[1])
     q_list_2, q_words_2 = prepareQuestion(questions[2])
@@ -286,16 +296,37 @@ def tests():
     q_list_6, q_words_6 = prepareQuestion(questions[6])
     q_list_7, q_words_7 = prepareQuestion(questions[7])
 
-    assert getUnansweredPart(q_list_0, q_words_0,0) == (["____"], "TEST")
-    assert getUnansweredPart(q_list_1, q_words_1,0) == (["____,", "this", "is"], "TEST,")
-    assert getUnansweredPart(q_list_2, q_words_2,0) == (["_____,", "_____,", "_____", "and", "_____"], "TEST1,")
-    assert getUnansweredPart(q_list_3, q_words_3,0) == (["____,", "another", "____"], "TEST,")
-    assert getUnansweredPart(q_list_4, q_words_4,0) == (["____"], "TEST")
-    assert getUnansweredPart(q_list_5, q_words_5,0) == (["____,", "but", "this", "is", "not", "a", "test"], "TEST,")
-    assert getUnansweredPart(q_list_2, q_words_2,1) == (["_____,", "_____", "and", "_____"], "TEST2,")
-    assert getUnansweredPart(q_list_3, q_words_3,1) == (["____"], "TEST")
-    assert getUnansweredPart(q_list_6, q_words_6,0) == "No matching question words found in question"
-    assert getUnansweredPart(q_list_7, q_words_7,0) == "No matching question words found in question"
+    assert makeUnansweredPart(q_list_0, q_words_0,0) == ["____"]
+    assert makeUnansweredPart(q_list_1, q_words_1,0) == ["____,", "this", "is"]
+    assert makeUnansweredPart(q_list_2, q_words_2,0) == ["_____,", "_____,", "_____", "and", "_____"]
+    assert makeUnansweredPart(q_list_3, q_words_3,0) == ["____,", "another", "____"]
+    assert makeUnansweredPart(q_list_4, q_words_4,0) == ["____"]
+    assert makeUnansweredPart(q_list_5, q_words_5,0) == ["____,", "but", "this", "is", "not", "a", "test"]
+    assert makeUnansweredPart(q_list_2, q_words_2,1) == ["_____,", "_____", "and", "_____"]
+    assert makeUnansweredPart(q_list_3, q_words_3,1) == ["____"]
+    assert makeUnansweredPart(q_list_6, q_words_6,0) == "No matching question words found in question"
+    assert makeUnansweredPart(q_list_7, q_words_7,0) == "No matching question words found in question"
+
+    #makeCurrentAnswerElement
+    q_list_0, q_words_0 = prepareQuestion(questions[0])
+    q_list_1, q_words_1 = prepareQuestion(questions[1])
+    q_list_2, q_words_2 = prepareQuestion(questions[2])
+    q_list_3, q_words_3 = prepareQuestion(questions[3])
+    q_list_4, q_words_4 = prepareQuestion(questions[4])
+    q_list_5, q_words_5 = prepareQuestion(questions[5])
+    q_list_6, q_words_6 = prepareQuestion(questions[6])
+    q_list_7, q_words_7 = prepareQuestion(questions[7])
+
+    assert makeCurrentAnswerElement(q_list_0, q_words_0,0) == "TEST"
+    assert makeCurrentAnswerElement(q_list_1, q_words_1,0) == "TEST,"
+    assert makeCurrentAnswerElement(q_list_2, q_words_2,0) == "TEST1,"
+    assert makeCurrentAnswerElement(q_list_3, q_words_3,0) == "TEST,"
+    assert makeCurrentAnswerElement(q_list_4, q_words_4,0) == "TEST"
+    assert makeCurrentAnswerElement(q_list_5, q_words_5,0) == "TEST,"
+    assert makeCurrentAnswerElement(q_list_2, q_words_2,1) == "TEST2,"
+    assert makeCurrentAnswerElement(q_list_3, q_words_3,1) == "TEST"
+    assert makeCurrentAnswerElement(q_list_6, q_words_6,0) == "No matching question words found in question"
+    assert makeCurrentAnswerElement(q_list_7, q_words_7,0) == "No matching question words found in question"
 
     #composeQuestionString
     q_list_0, q_words_0 = prepareQuestion(questions[0])
@@ -334,11 +365,6 @@ def tests():
     assert composeResponseString(q_list_5, q_words_5,0) == "this is a TEST, but this is not a test"
     assert composeResponseString(q_list_2, q_words_2,1) == "this is a test1, TEST2, _____ and _____"
     assert composeResponseString(q_list_3, q_words_3,1) == "a test, another TEST"
-
-    #composeResponseString
-    q_list_0, q_words_0 = prepareQuestion(questions[0])
-
-    assert giveResponse(q_list_0, q_words_0,0,None) == "Unlucky. The answer is TEST"
 
     #define3LevelGame
     game = define3LevelGame(questions[0], questions[1], questions[2])
