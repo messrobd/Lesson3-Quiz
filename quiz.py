@@ -151,14 +151,12 @@ def checkAnswer(q_words, q_number):
     while answered == False and lives >= 1:
         answer = raw_input("Answer: ")
         if answer.lower() == q_word.lower():
-            print "Correct!"#remove
             answered = True
             return answered
         elif lives > 1:
             lives -= 1
             print "Sorry, that's not correct. Try again ({0} attempts left): ".format(lives)
         else:
-            print "Unlucky. The answer is {0}".format(q_word.upper())
             return
 
 def giveResponse(q_list, q_words, q_number, answer):
@@ -183,6 +181,7 @@ def play(game, level_label_index, level_question_index):
         q_number = q_words.index(question)
         askQuestion(q_list, q_words, q_number)
         answer = checkAnswer(q_words, q_number)
+        print (giveResponse(q_list, q_words, q_number, answer) + "\n")
         if answer:
             score += 1
 
@@ -211,8 +210,8 @@ to the same list; this is known as ?aliasing. Because of this property, a change
 variable can propagate to other variables.
 """, ["list", "string", "mutable", "aliasing"]]
 
-#game, level_label_index, level_question_index = define3LevelGame(easy_question, medium_question, hard_question)
-#play(game, level_label_index, level_question_index)
+game, level_label_index, level_question_index = define3LevelGame(easy_question, medium_question, hard_question)
+play(game, level_label_index, level_question_index)
 
 #testing
 def tests():
@@ -336,6 +335,11 @@ def tests():
     assert composeResponseString(q_list_5, q_words_5,0) == "this is a TEST, but this is not a test"
     assert composeResponseString(q_list_2, q_words_2,1) == "this is a test1, TEST2, _____ and _____"
     assert composeResponseString(q_list_3, q_words_3,1) == "a test, another TEST"
+
+    #composeResponseString
+    q_list_0, q_words_0 = prepareQuestion(questions[0])
+
+    assert giveResponse(q_list_0, q_words_0,0,None) == "Unlucky. The answer is TEST"
 
     #define3LevelGame
     game = define3LevelGame(questions[0], questions[1], questions[2])
