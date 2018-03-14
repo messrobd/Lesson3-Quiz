@@ -1,7 +1,14 @@
 #functions
 def define3LevelGame(easy_q, medium_q, hard_q):
-    """outputs a game composed of 3 questions corresponding to the
-    easy, medium, and hard levels"""
+    """
+    1. Behaviour: packs the questions corresponding to 3 named
+    levels (easy, medium, hard) into a single object
+    2. Inputs: 3 questions
+    3. Outputs: a tuple containing 3 values:
+        i. a list of level objects, each which has a name and a question
+        ii. the locations of the name and question values within
+        each level object
+    """
     easy_level = ["Easy", easy_q]
     medium_level = ["Medium", medium_q]
     hard_level = ["Hard", hard_q]
@@ -12,26 +19,38 @@ def define3LevelGame(easy_q, medium_q, hard_q):
 
     return game, level_label_index, level_question_index
 
-def pickLevel(game, level_label_index):
-    """given a game as input, lists the game's levels at the command
-    prompt. the output is the user's chosen pick (as int)"""
-
+def pickLevel(gamelevels, level_label_index):
+    """
+    1. Behaviour: shows the user the available levels, and
+    prompts them user to pick one
+    2. Inputs: a list of game levels, and the location of the level
+    label value
+    3. Outputs: the chosen level object
+    """
     print "Pick a level:"
-    for level in game:
-        print "{0} - {1}".format(game.index(level), level[level_label_index])
+    for level in gamelevels:
+        print "{0} - {1}".format(gamelevels.index(level), level[level_label_index])
     valid_pick = False
     while valid_pick == False:
         pick = raw_input()
         try:
-            pick = game[int(pick)]
+            pick = gamelevels[int(pick)]
             valid_pick = True
         except:
-            print "Please pick a number 0 - {0}".format(len(game)-1)
+            print "Please pick a number 0 - {0}".format(len(gamelevels)-1)
 
     return pick
 
 def prepareQuestion(question):
-
+    """
+    1. Behaviour: performs a rudimentary check that the question object
+    is formed per expectations (below), and returns the 2 expected parts
+    2. Inputs: a question formatted as follows:
+    ["the question string including a ?question word", ["question"]]
+    3. Outputs: the question parts:
+        i. a list containing all the words in the question string
+        ii. a list containing those words that are to be blanked
+    """
     q_valid_length = 2
     try:
         assert len(question) == q_valid_length
@@ -49,11 +68,18 @@ def prepareQuestion(question):
     return q_list, q_words
 
 def locateQuestionWords(q_list, q_words):
-    """given a properly formatted question (see below), outputs a list
-    of all words in the question string + a list placing question numbers
-    in their proper position in the question string. the question must be
-    formatted as follows:
-    ["the question string including a ?question word", ["question"]]"""
+    """
+    1. Behaviour: wherever there is a tagged word in the question, do 2 things:
+        i. remove the tag
+        ii. store it as a numbered question
+    2. Inputs: 2 lists, 1 containing all words, the other conatining those
+    that are to be blanked
+    3. Outputs: the processed results:
+        i. a list containing all the words in the question string, with tags
+        removed
+        ii. a list with numbers wherever there is a question, in the string, and
+        empty strings everywhere else
+    """
     q_tag, q_tag_index = "?", 0
     q_number = 0
     q_word_locations = []
@@ -75,6 +101,13 @@ def locateQuestionWords(q_list, q_words):
     return q_word_locations, q_list_detagged
 
 def getAnsweredPart(q_list, q_words, q_number):
+    """
+    1. Behaviour: finds the part of the question string that precedes
+    the current question
+    2. Inputs: the list of all words in the question, the list of words
+    to be blanked, and the current question number
+    3. Outputs: a list of words preceding the current question
+    """
     q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
     try:
         q_index = q_word_locations.index(q_number)
@@ -86,6 +119,15 @@ def getAnsweredPart(q_list, q_words, q_number):
     return a_list
 
 def makeUnansweredPart(q_list, q_words, q_number):
+    """
+    1. Behaviour: finds the part of the question string from the current
+    question onwards, and inserts blanks wherever there is a question
+    remaining to be answered
+    2. Inputs: the list of all words in the question, the list of words
+    to be blanked, and the current question number
+    3. Outputs: a list of words from the current question onwards, with blanks
+    in place of the remaining question words
+    """
     q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
     try:
         q_index = q_word_locations.index(q_number)
@@ -109,6 +151,14 @@ def makeUnansweredPart(q_list, q_words, q_number):
     return ua_list
 
 def makeCurrentAnswerElement(q_list, q_words, q_number):
+    """
+    1. Behaviour: finds the element from the question string corresponding to
+    the current question, and returns it in upper case
+    2. Inputs: the list of all words in the question, the list of words
+    to be blanked, and the current question number
+    3. Outputs: a string in upper case from the question list, corresponding to the current
+    question
+    """
     q_word_locations, q_list_detagged = locateQuestionWords(q_list, q_words)
     try:
         q_index = q_word_locations.index(q_number)
@@ -121,10 +171,14 @@ def makeCurrentAnswerElement(q_list, q_words, q_number):
 
 
 def composeQuestionString(q_list, q_words):
-    """given a properly formatted question (see below) and a question number,
-    ouputs a question string with blanks in place of the questions yet to
-    be answered. the question must be formatted as follows:
-    ["the question string including a ?question word", ["question"]]"""
+    """
+    1. Behaviour: splices together the question lists either side of the
+    first question
+    2. Inputs: the list of all words in the question, and the list of words
+    to be blanked
+    3. Outputs: the question list, as a string, with blanks in place of all
+    question words
+    """
     q_number = 0
     a_list = getAnsweredPart(q_list, q_words, q_number)
     ua_list = makeUnansweredPart(q_list, q_words, q_number)
@@ -134,6 +188,14 @@ def composeQuestionString(q_list, q_words):
     return q_string
 
 def composeResponseString(q_list, q_words, q_number):
+    """
+    1. Behaviour: splices together the question lists either side of the
+    current question, with the answer to the current question in upper case
+    2. Inputs: the list of all words in the question, the list of words
+    to be blanked, and the current question number
+    3. Outputs: the question list, as a string, with the current question in
+    upper case and the remaining questions blanked
+    """
     a_list = getAnsweredPart(q_list, q_words, q_number)
     ua_list  = makeUnansweredPart(q_list, q_words, q_number)
     ua_word = makeCurrentAnswerElement(q_list, q_words, q_number)
@@ -145,15 +207,22 @@ def composeResponseString(q_list, q_words, q_number):
     return r_string
 
 def askQuestion(q_list, q_words):
+    """
+    1. Behaviour: composes a string to show at the beginning of the game
+    2. Inputs: the list of all words in the question, and the list of words
+    to be blanked
+    3. Outputs: a string comprising a prompt followed by the question list
+    """
     q_string = composeQuestionString(q_list, q_words)
     return ("\nQuestion: \n" + q_string)
 
 def checkAnswer(q_words, q_number):
-    """given a properly formatted question (see below) and a question number,
-    shows the question string and outputs the result of checking the user's
-    answer. the user has 5 attempts to answer correctly, after which the correct
-    answer is shown. the question must be formatted as follows:
-    ["the question string including a ?question word", ["question"]]"""
+    """
+    1. Behaviour: prompts the user to answer the current question. Gives them a
+    number of attempts to do so before returning
+    2. Inputs: the list of question words, and the current question number
+    3. Outputs: True if the question was answered correctly, None if it isn't
+    """
     q_word = q_words[q_number]
 
     answered = False
@@ -170,6 +239,15 @@ def checkAnswer(q_words, q_number):
             return
 
 def giveResponse(q_list, q_words, q_number, answer):
+    """
+    1. Behaviour: composes a string to show in response to the user's attempt
+    to answer the question
+    2. Inputs: the list of all words in the question, the list of words
+    to be blanked, the current question number, and the result of the user's
+    attempt to answer
+    3. Outputs: a string comprising a response message, followed by the
+    response string for the current question
+    """
     r_string = composeResponseString(q_list, q_words, q_number)
     q_word = q_words[q_number]
 
@@ -180,8 +258,12 @@ def giveResponse(q_list, q_words, q_number, answer):
 
 
 def play(game):
-    """given a game, prompts the user to pick a level and receives their answers to
-    each question. presents score at the end."""
+    """
+    1. Behaviour: initiates a game, and steps through the question words in the
+    chosen level until they have all been attempted
+    2. Inputs: a game
+    3. Outputs: the game result, in the form of a score  
+    """
     gamelevels, level_label_index, level_question_index = game
     level = pickLevel(gamelevels, level_label_index)
     level_question = level[level_question_index]
