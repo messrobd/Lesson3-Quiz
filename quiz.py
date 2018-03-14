@@ -110,11 +110,12 @@ def getUnansweredPart(q_list, q_words, q_number):
 
     return ua_list, ua_word
 
-def composeQuestionString(q_list, q_words, q_number):
+def composeQuestionString(q_list, q_words):
     """given a properly formatted question (see below) and a question number,
     ouputs a question string with blanks in place of the questions yet to
     be answered. the question must be formatted as follows:
     ["the question string including a ?question word", ["question"]]"""
+    q_number = 0
     a_list = getAnsweredPart(q_list, q_words, q_number)
     ua_list_index = 0
     ua_list = getUnansweredPart(q_list, q_words, q_number)[0]
@@ -133,8 +134,8 @@ def composeResponseString(q_list, q_words, q_number):
 
     return r_string
 
-def askQuestion(q_list, q_words, q_number):
-    q_string = composeQuestionString(q_list, q_words, q_number)
+def askQuestion(q_list, q_words):
+    q_string = composeQuestionString(q_list, q_words)
     return ("Question: \n" + q_string)
 
 def checkAnswer(q_words, q_number):
@@ -175,10 +176,11 @@ def play(game, level_label_index, level_question_index):
     level_question = level[level_question_index]
     q_list, q_words = prepareQuestion(level_question)
 
+    print (askQuestion(q_list, q_words) + "\n")
+
     score = 0
     for question in q_words:
         q_number = q_words.index(question)
-        print askQuestion(q_list, q_words, q_number)
         answer = checkAnswer(q_words, q_number)
         print (giveResponse(q_list, q_words, q_number, answer) + "\n")
         if answer:
@@ -305,14 +307,12 @@ def tests():
     q_list_6, q_words_6 = prepareQuestion(questions[6])
     q_list_7, q_words_7 = prepareQuestion(questions[7])
 
-    assert composeQuestionString(q_list_0, q_words_0,0) == "this is a ____"
-    assert composeQuestionString(q_list_1, q_words_1,0) == "a ____, this is"
-    assert composeQuestionString(q_list_2, q_words_2,0) == "this is a _____, _____, _____ and _____"
-    assert composeQuestionString(q_list_3, q_words_3,0) == "a ____, another ____"
-    assert composeQuestionString(q_list_4, q_words_4,0) == "this is not a test, but this is a ____"
-    assert composeQuestionString(q_list_5, q_words_5,0) == "this is a ____, but this is not a test"
-    assert composeQuestionString(q_list_2, q_words_2,1) == "this is a test1, _____, _____ and _____"
-    assert composeQuestionString(q_list_3, q_words_3,1) == "a test, another ____"
+    assert composeQuestionString(q_list_0, q_words_0) == "this is a ____"
+    assert composeQuestionString(q_list_1, q_words_1) == "a ____, this is"
+    assert composeQuestionString(q_list_2, q_words_2) == "this is a _____, _____, _____ and _____"
+    assert composeQuestionString(q_list_3, q_words_3) == "a ____, another ____"
+    assert composeQuestionString(q_list_4, q_words_4) == "this is not a test, but this is a ____"
+    assert composeQuestionString(q_list_5, q_words_5) == "this is a ____, but this is not a test"
     #assert composeQuestionString(q_list_6, q_words_6,0) == "No matching question words found in question"
     #assert composeQuestionString(q_list_7, q_words_7,0) == "No matching question words found in question"
 
