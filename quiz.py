@@ -146,7 +146,7 @@ def composeResponseString(q_list, q_words, q_number):
 
 def askQuestion(q_list, q_words):
     q_string = composeQuestionString(q_list, q_words)
-    return ("Question: \n" + q_string)
+    return ("\nQuestion: \n" + q_string)
 
 def checkAnswer(q_words, q_number):
     """given a properly formatted question (see below) and a question number,
@@ -179,10 +179,11 @@ def giveResponse(q_list, q_words, q_number, answer):
         return ("\nUnlucky. The answer is {0} \n".format(q_word.upper()) + r_string)
 
 
-def play(game, level_label_index, level_question_index):
+def play(game):
     """given a game, prompts the user to pick a level and receives their answers to
     each question. presents score at the end."""
-    level = pickLevel(game, level_label_index)
+    gamelevels, level_label_index, level_question_index = game
+    level = pickLevel(gamelevels, level_label_index)
     level_question = level[level_question_index]
     q_list, q_words = prepareQuestion(level_question)
 
@@ -221,8 +222,8 @@ to the same list; this is known as ?aliasing. Because of this property, a change
 variable can propagate to other variables.
 """, ["list", "string", "mutable", "aliasing"]]
 
-game, level_label_index, level_question_index = define3LevelGame(easy_question, medium_question, hard_question)
-play(game, level_label_index, level_question_index)
+game = define3LevelGame(easy_question, medium_question, hard_question)
+play(game)
 
 #testing
 def tests():
@@ -368,12 +369,13 @@ def tests():
 
     #define3LevelGame
     game = define3LevelGame(questions[0], questions[1], questions[2])
-    assert game[0][0][0] == "Easy"
-    assert game[0][1][0] == "Medium"
-    assert game[0][2][0] == "Hard"
-    assert game[0][0][1] == ["this is a ?test", ["test"]]
-    assert game[0][1][1] == ["a ?test, this is", ["test"]]
-    assert game[0][2][1] == ["this is a ?test1, ?test2, ?test3 and ?test4", ["test1", "test2", "test3", "test4"]]
+    gamelevels, level_label_index, level_question_index = game
+    assert game[0][0][level_label_index] == "Easy"
+    assert game[0][1][level_label_index] == "Medium"
+    assert game[0][2][level_label_index] == "Hard"
+    assert game[0][0][level_question_index] == ["this is a ?test", ["test"]]
+    assert game[0][1][level_question_index] == ["a ?test, this is", ["test"]]
+    assert game[0][2][level_question_index] == ["this is a ?test1, ?test2, ?test3 and ?test4", ["test1", "test2", "test3", "test4"]]
 
     #play(game)
 
